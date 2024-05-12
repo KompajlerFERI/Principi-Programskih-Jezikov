@@ -33,10 +33,13 @@ fun main() {
 
                     findAll {
                         forEach {
-                            val restaurantName = it.attributes["data-lokal"]
-                            //val restaurantLink = it.a { findFirst( attribute("href")) }
-                            println("Restaurant Name: $restaurantName")
-                            //println("Restaurant Link: https://www.studentska-prehrana.si$restaurantLink")
+                            val city = it.attributes["data-city"]
+                            if (city == "MARIBOR") {
+                                val restaurantName = it.attributes["data-lokal"]
+                                //val restaurantLink = it.a { findFirst( attribute("href")) }
+                                println("Restaurant Name: $restaurantName")
+                                //println("Restaurant Link: https://www.studentska-prehrana.si$restaurantLink")
+                            }
                         }
                     }
                 }
