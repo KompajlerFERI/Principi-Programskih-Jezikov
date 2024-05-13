@@ -56,13 +56,29 @@ fun main() {
             skrape(HttpFetcher) {
                 request {
                     url = pair.second
+                    timeout = 10000
+                    //url = "https://www.studentska-prehrana.si/sl/restaurant/Details/3237"
                 }
 
                 response {
                     htmlDocument {
                         div {
                             withId = "menu-list"
-
+                            findFirst {
+                                div {
+                                    withClass = "shadow-wrapper"
+                                    findAll {
+                                        h5 {
+                                            findAll {
+                                                val menus = eachText
+                                                menus.forEach { menu ->
+                                                    println("Menu: $menu")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                         }
                     }
@@ -74,11 +90,34 @@ fun main() {
     }
 }
 
-
-//ul {
-//    withClass = "list-unstyled"
-//    findAll {
-//        val ingredients = eachText
-//        println("Ingredients: $ingredients")
+//    skrape(HttpFetcher) {
+//        request {
+//            //url = pair.second
+//            url = "https://www.studentska-prehrana.si/sl/restaurant/Details/3237"
+//        }
+//
+//        response {
+//            htmlDocument {
+//                div {
+//                    withId = "menu-list"
+//                    findFirst {
+//                        div {
+//                            withClass = "shadow-wrapper"
+//                            findAll {
+//                                h5 {
+//                                    findAll {
+//                                        val menus = eachText
+//                                        menus.forEach { menu ->
+//                                            println("Menu: $menu")
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }
 //    }
 //}
