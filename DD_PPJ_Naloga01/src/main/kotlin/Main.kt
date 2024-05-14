@@ -8,6 +8,13 @@ import it.skrape.selects.attribute
 import it.skrape.selects.eachText
 import it.skrape.selects.html5.*
 
+fun isWholeNumber(num: Double): Boolean {
+    if (num != Math.floor(num)) {
+        throw IllegalArgumentException("$num is not a whole number.")
+    }
+    return true
+}
+
 fun main() {
     println("========== Scraping restaurants - printing ==========")
     val restaurantLinks = mutableListOf<Pair<String?, String>>()
@@ -73,6 +80,17 @@ fun main() {
                                                 val menus = eachText
                                                 menus.forEach { menu ->
                                                     println("Menu: $menu")
+                                                    withClass = "list-unstyled"
+//                                                    findFirst {
+//                                                        li {
+//                                                            findAll {
+//                                                                val extras = eachText
+//                                                                extras.forEach { extra ->
+//                                                                    println("\t$extra")
+//                                                                }
+//                                                            }
+//                                                        }
+//                                                    }
                                                 }
                                             }
                                         }
@@ -92,7 +110,6 @@ fun main() {
 
 //    skrape(HttpFetcher) {
 //        request {
-//            //url = pair.second
 //            url = "https://www.studentska-prehrana.si/sl/restaurant/Details/3237"
 //        }
 //
@@ -104,18 +121,37 @@ fun main() {
 //                        div {
 //                            withClass = "shadow-wrapper"
 //                            findAll {
-//                                h5 {
+//                                div {
+//                                    withClass = "col.col-md-8.margin-left-10"
 //                                    findAll {
-//                                        val menus = eachText
-//                                        menus.forEach { menu ->
-//                                            println("Menu: $menu")
+//                                        h5 {
+//                                            findAll {
+//                                                val menus = eachText
+//                                                menus.forEach { menu ->
+//                                                    println("Menu: $menu")
+//                                                }
+//                                            }
+//                                        }
+//
+//                                        ul {
+//                                            withClass = "list-unstyled"
+//                                            findAll {
+//                                                li {
+//                                                    findAll {
+//                                                        val extras = eachText
+//                                                        println((extras.size.toDouble()/3))
+//                                                        extras.forEach { extra ->
+//                                                            println(extra)
+//                                                        }
+//                                                    }
+//                                                }
+//                                            }
 //                                        }
 //                                    }
 //                                }
 //                            }
 //                        }
 //                    }
-//
 //                }
 //            }
 //        }
