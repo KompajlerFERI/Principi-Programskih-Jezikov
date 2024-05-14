@@ -18,6 +18,9 @@ fun isWholeNumber(num: Double): Boolean {
 fun main() {
     println("========== Scraping restaurants - printing ==========")
     val restaurantLinks = mutableListOf<Pair<String?, String>>()
+    val menusList = mutableListOf<String>()
+    var num = 3
+    var index = 0
 
     skrape(HttpFetcher) {
         request {
@@ -75,35 +78,55 @@ fun main() {
                                 div {
                                     withClass = "shadow-wrapper"
                                     findAll {
-                                        h5 {
+                                        div {
+                                            withClass = "col.col-md-8.margin-left-10"
                                             findAll {
-                                                val menus = eachText
-                                                menus.forEach { menu ->
-                                                    println("Menu: $menu")
+                                                h5 {
+                                                    findAll {
+                                                        val menus = eachText
+                                                        menus.forEach { menu ->
+                                                            //println("Menu: $menu")
+                                                            menusList.add(menu)
+                                                        }
+                                                    }
+                                                }
+
+                                                ul {
                                                     withClass = "list-unstyled"
-//                                                    findFirst {
-//                                                        li {
-//                                                            findAll {
-//                                                                val extras = eachText
-//                                                                extras.forEach { extra ->
-//                                                                    println("\t$extra")
-//                                                                }
-//                                                            }
-//                                                        }
-//                                                    }
+                                                    findAll {
+                                                        li {
+                                                            findAll {
+                                                                val extras = eachText
+                                                                println((extras.size.toDouble() / 3))
+                                                                isWholeNumber((extras.size.toDouble() / 3))
+                                                                extras.forEach { extra ->
+                                                                    if (num == 3) {
+                                                                        println("\n" + menusList[index])
+                                                                        index++
+                                                                        num = 0
+                                                                    }
+                                                                    num++
+                                                                    if (extra.isNotEmpty()) {
+                                                                        println(extra)
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-
                         }
                     }
                 }
             }
         } catch (e: it.skrape.selects.ElementNotFoundException) {
             println("MENU UNAVAILABLE")
+        } catch (e: Exception) {
+            println("ERROR: ${e.message}")
         }
     }
 }
