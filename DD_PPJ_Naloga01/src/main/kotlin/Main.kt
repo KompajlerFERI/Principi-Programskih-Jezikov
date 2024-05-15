@@ -7,25 +7,74 @@ import it.skrape.fetcher.skrape
 import it.skrape.selects.attribute
 import it.skrape.selects.eachText
 import it.skrape.selects.html5.*
-import org.w3c.dom.Text
 
-class Restaurant(val name: String, val fullPrice: String, val payPrice: String, val longitude: String, val latitude: String, val address: String, val link: String) {
+object RestaurantList {
+    val restaurants = mutableListOf<Restaurant>()
+
+    fun add(restaurant: Restaurant) =
+        restaurants.add(restaurant)
+}
+
+class Restaurant(
+    var name : String = "",
+    var fullPrice: String = "",
+    var payPrice: String = "",
+    var longitude: String = "",
+    var latitude: String = "",
+    var address: String = "",
+    var menuListString: MutableList<String> = mutableListOf(), //tu samo shrani menije kot string
+    var menuList: MutableList<Menu> = mutableListOf(), //tu ko jih razcepi na Menu jih da v seznam
+    var phoneNumber : String = "",
+    var workingTimes: MutableList<String> = mutableListOf(),
+) {
     override fun toString(): String {
-        return "Restaurant Name: $name\n" +
-                "Restaurant full price: $fullPrice€\n" +
-                "Restaurant pay price: $payPrice€\n" +
-                "Restaurant longitude: $longitude\n" +
-                "Restaurant latitude: $latitude\n" +
-                "Restaurant address: $address\n" +
-                "Restaurant Link: $link\n"
+        var menuString = ""
+        menuList.forEach() { menu ->
+            menuString += menu.toString() + "\n"
+        }
+
+        return "RESTAURANT: $name\n" +
+                "Full price: $fullPrice\n" +
+                "Pay price: $payPrice\n" +
+                "Longitude: $longitude\n" +
+                "Latitude: $latitude\n" +
+                "Address: $address\n" +
+                "Phone number: $phoneNumber\n" +
+                "Working times: $workingTimes\n\n" +
+                "MENU:\n" +
+                menuString + "\n"
     }
 
 }
 
-class Menu(val menu: String, val extras: List<String>) {
+class Menu(var dish: String = "",
+           var extras: MutableList<String> = mutableListOf(),
+           var category: String = ""
+) {
+    fun menuStringToMenu(menuString: String) : Menu {
+        val menuSplitIntoParts = menuString.split(";")
+        val dish = menuSplitIntoParts[0]
+        val category = menuSplitIntoParts[1]
+        val extrasString = menuSplitIntoParts[2].split("%%%")
+        extrasString.forEach() { extra ->
+            if (extra != "") {
+                extras.add(extra)
+            }
+        }
+
+        return Menu(dish, extras, category)
+    }
+
     override fun toString(): String {
-        return "Menu: $menu\n" +
-                "Extras: $extras\n"
+        var extraString = ""
+        extras.forEach() { extra ->
+            extraString += "$extra, "
+        }
+        extraString.removeSuffix(", ")
+
+        return "$dish|" +
+                "$category\n" +
+                "Extras: $extraString"
     }
 }
 
@@ -82,6 +131,13 @@ fun main() {
     val menuCategory = mutableListOf<String>()
     var num = 3
     var index = 0
+    var listCounter = 0
+
+    var fullDishInfoString : String = ""
+    var fullDishInfo = mutableListOf<String>()
+
+    var restaurantList = RestaurantList
+
 
     skrape(HttpFetcher) {
         request {
@@ -103,12 +159,12 @@ fun main() {
                                 val restaurantLongitude = it.attributes["data-lon"]
                                 val restaurantLatitude = it.attributes["data-lat"]
                                 val restaurantAddress = it.attributes["data-naslov"]
-                                println("Restaurant Name: $restaurantName")
-                                println("Restaurant full price: $restaurantFullPrice€")
-                                println("Restaurant pay price: $restaurantPayPrice€")
-                                println("Restaurant longitude: $restaurantLongitude")
-                                println("Restaurant latitude: $restaurantLatitude")
-                                println("Restaurant address: $restaurantAddress")
+                                //println("Restaurant Name: $restaurantName")
+                                //println("Restaurant full price: $restaurantFullPrice€")
+                                //println("Restaurant pay price: $restaurantPayPrice€")
+                                //println("Restaurant longitude: $restaurantLongitude")
+                                //println("Restaurant latitude: $restaurantLatitude")
+                                //println("Restaurant address: $restaurantAddress")
                                 val restaurantLink = it.h2 {
                                     withClass = "no-margin.color-blue"
                                     findFirst {
@@ -120,8 +176,9 @@ fun main() {
                                     }
                                 }
                                 val redirectLink = "https://www.studentska-prehrana.si" + restaurantLink
-                                println("Restaurant Link: " + redirectLink)
+                                //println("Restaurant Link: " + redirectLink)
                                 restaurantLinks.add(Pair(restaurantName, redirectLink))
+                                restaurantList.add(Restaurant(name = restaurantName!!, fullPrice = restaurantFullPrice!!, payPrice = restaurantPayPrice!!, longitude = restaurantLongitude!!, latitude = restaurantLatitude!!, address = restaurantAddress!!))
                             }
                         }
                     }
@@ -131,8 +188,12 @@ fun main() {
     }
 
     println("========== Scraping menus - printing ==========")
-    restaurantLinks.forEach { pair ->
-        println("_________________________________________________\nRestaurant Name: ${pair.first}")
+    for (pair in restaurantLinks) {
+//        if (pair.first == "CITY GRILL" || pair.first == "CITY GRILL - DOSTAVA") {
+//            println("CITY GRILL SPOTTED!!!!!!!!!!!!!!!")
+//            continue
+//        }
+        //println("_________________________________________________\nRestaurant Name: ${pair.first}")
         try {
             skrape(HttpFetcher) {
                 request {
@@ -143,7 +204,7 @@ fun main() {
 
                 response {
                     htmlDocument {
-                        println("\n")
+                        //println("\n")
                         div {
                             withClass = "col-md-12.margin-top-20"
                             findFirst {
@@ -152,20 +213,26 @@ fun main() {
                                     findFirst {
                                         val content = text
                                         getWorkingTimesFromString(content).forEach { workingTime ->
-                                            println(workingTime)
+                                            //println(workingTime)
+
+                                            restaurantList.restaurants.forEach { restaurant ->
+                                                if (restaurant.name == pair.first) {
+                                                    restaurant.workingTimes.add(workingTime)
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                        println("\n")
+                        //println("\n")
                         div {
                             withId = "menu-list"
                             findFirst {
                                 div {
                                     withClass = "shadow-wrapper"
                                     findAll {
-                                        div {
+                                        div { // here it finds menu category
                                             withClass = "col-md-3.pull-right"
                                             findAll {
                                                 img {
@@ -183,7 +250,7 @@ fun main() {
                                             }
                                         }
 
-                                        div {
+                                        div {  //here it finds dish title
                                             withClass = "col.col-md-8.margin-left-10"
                                             findAll {
                                                 h5 {
@@ -196,27 +263,58 @@ fun main() {
                                                     }
                                                 }
 
-                                                ul {
+                                                ul {  //here it finds extras
                                                     withClass = "list-unstyled"
                                                     findAll {
                                                         li {
                                                             findAll {
                                                                 val extras = eachText
-                                                                println((extras.size.toDouble() / 3))
+                                                                //println((extras.size.toDouble() / 3))
                                                                 isWholeNumber((extras.size.toDouble() / 3))
                                                                 extras.forEach { extra ->
                                                                     if (num == 3) {
-                                                                        println("\n" + menusList[index] + "|" + menuCategory[index])
-                                                                        index++
-                                                                        num = 0
+                                                                        if (listCounter == 3) {
+                                                                            if (fullDishInfoString.isNotEmpty()) {
+                                                                                fullDishInfo.add(fullDishInfoString)
+                                                                            }
+                                                                            fullDishInfoString = ""
+                                                                            listCounter = 0
+                                                                        }
+                                                                        //println("\n" + menusList[index] + ";" + menuCategory[index])
+                                                                        if (menusList.size != menuCategory.size) {
+                                                                            fullDishInfoString += "\n" + menusList[index] + ";CATEGORY UNAVAILABLE;"
+                                                                            index++
+                                                                            num = 0
+                                                                        }
+                                                                        else {
+                                                                            fullDishInfoString += "\n" + menusList[index] + ";" + menuCategory[index] + ";"
+                                                                            index++
+                                                                            num = 0
+                                                                        }
                                                                     }
                                                                     num++
-                                                                    if (extra.isNotEmpty()) {
-                                                                        println(extra)
-                                                                    }
+
+                                                                    //println(extra)
+                                                                    fullDishInfoString += "%%%" + extra
+                                                                    listCounter++
+                                                                }
+                                                                if (fullDishInfoString.isNotEmpty()) {
+                                                                    fullDishInfo.add(fullDishInfoString)
+                                                                    fullDishInfoString = ""
                                                                 }
                                                             }
                                                         }
+                                                    }
+                                                }
+
+
+                                                restaurantList.restaurants.forEach { restaurant ->
+                                                    if (restaurant.name == pair.first) {
+                                                        restaurant.menuListString = fullDishInfo.toMutableList()
+                                                        fullDishInfo.clear()
+                                                        index = 0
+                                                        menusList.clear()
+                                                        menuCategory.clear()
                                                     }
                                                 }
                                             }
@@ -233,19 +331,51 @@ fun main() {
                                     findFirst {
                                         var phoneNumber = text
                                         phoneNumber = getPhoneNumberFromString(phoneNumber)
-                                        println("Phone number: $phoneNumber")
+                                        //println("Phone number: $phoneNumber")
+                                        restaurantList.restaurants.forEach { restaurant ->
+                                            if (restaurant.name == pair.first) {
+                                                restaurant.phoneNumber = phoneNumber
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+//                restaurantList.restaurants.forEach { restaurant ->
+//                    if (restaurant.name == pair.first) {
+//                        print("=================================================\n")
+//                        print(restaurant.toString())
+//                    }
+//                }
             }
         } catch (e: it.skrape.selects.ElementNotFoundException) {
-            println("MENU UNAVAILABLE")
+            //println("MENU UNAVAILABLE")
+            restaurantList.restaurants.forEach { restaurant ->
+                if (restaurant.name == pair.first) {
+                    //restaurant.menuList.add(Menu("MENU UNAVAILABLE"))
+                    restaurant.menuListString.add("MENU UNAVAILABLE")
+                }
+            }
         } catch (e: Exception) {
             println("ERROR: ${e.message}")
         }
+        println("SCRAPED: ${pair.first}")
+    }
+
+    println("==================== Scraping finished ====================")
+    restaurantList.restaurants.forEach() { restaurant ->
+        restaurant.menuListString.forEach { menuString ->
+
+            restaurant.menuList.add(Menu().menuStringToMenu(menuString))
+        }
+    }
+
+
+    restaurantList.restaurants.forEach { restaurant ->
+        print("=================== RESTAURANTS ===================\n")
+        print(restaurant.toString())
     }
 }
 
