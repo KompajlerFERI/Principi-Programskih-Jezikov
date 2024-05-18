@@ -367,8 +367,11 @@ fun main() {
     println("==================== Scraping finished ====================")
     restaurantList.restaurants.forEach() { restaurant ->
         restaurant.menuListString.forEach { menuString ->
-
-            restaurant.menuList.add(Menu().menuStringToMenu(menuString))
+            if (menuString == "MENU UNAVAILABLE") {
+                restaurant.menuList.add(Menu("MENU UNAVAILABLE"))
+            } else {
+                restaurant.menuList.add(Menu().menuStringToMenu(menuString))
+            }
         }
     }
 
