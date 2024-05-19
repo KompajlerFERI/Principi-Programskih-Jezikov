@@ -10,7 +10,7 @@ class Restaurant(
     var menuListString: MutableList<String> = mutableListOf(), //tu samo shrani menije kot string, tega ne uporablaj nikjer ker je useless
     var menuList: MutableList<Menu> = mutableListOf(), //tu ko jih razcepi na Menu jih da v seznam
     var phoneNumber : String = "",
-    var workingTimes: MutableList<String> = mutableListOf(),
+    var workingTimes: MutableList<String> = mutableListOf(), // vsi so čisto isto zapisani, eni majo sobota/nedelja: zaprto
 ) {
     override fun toString(): String {
         var menuString = ""

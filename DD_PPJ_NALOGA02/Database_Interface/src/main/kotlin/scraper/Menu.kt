@@ -1,8 +1,9 @@
 package scraper
 
-class Menu(var dish: String = "",
-           var extras: MutableList<String> = mutableListOf(),
-           var category: String = ""
+// menu item bolj ko menu
+class Menu(var dish: String = "", // ime hrane
+           var extras: MutableList<String> = mutableListOf(), //eni majo no category
+           var category: String = "" // kaj dobiš zraven
 ) {
     fun menuStringToMenu(menuString: String) : Menu {
         val menuSplitIntoParts = menuString.split(";")
