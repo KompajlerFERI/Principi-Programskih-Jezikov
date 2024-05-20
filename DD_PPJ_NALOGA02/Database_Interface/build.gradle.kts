@@ -22,6 +22,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("it.skrape:skrapeit:1.2.2")
     implementation("it.skrape:skrapeit:0-SNAPSHOT") { isChanging = true }
+
 }
 
 compose.desktop {
