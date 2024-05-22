@@ -14,12 +14,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import interface_components.*
+import scraper.Restaurant
 
 @Composable
 @Preview
 fun App() {
     val clickedNavButton = remember { mutableStateOf(false) }
-    var currentContent by remember { mutableStateOf(ContentSwitch.Restaurants) }
+    var currentContent by remember { mutableStateOf(ContentSwitch.Scraper) }
+    val restaurants = remember { mutableStateOf(listOf<Restaurant>()) }
+    val isLoading = remember { mutableStateOf(false) }
 
     // Znotraj row-a je nav bar in content stran ob strani
     Row(
@@ -59,6 +62,8 @@ fun App() {
         Spacer(modifier = Modifier.fillMaxHeight().width(15.dp))
         ContentSwitcher(
             clicked = clickedNavButton,
+            restaurants = restaurants,
+            isLoading = isLoading,
             currentContent = currentContent
         )
     }

@@ -1,28 +1,68 @@
 package interface_components.content
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
-import interface_components.textColor
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import interface_components.*
+import scraper.Restaurant
 
 @Composable
-fun Restaurants() {
-    Box (
+fun Restaurants(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState<Boolean>) {
+    Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color.Transparent),
         contentAlignment = Alignment.Center
-    ){
-        Text(
-            text = "Restaurants",
-            style = TextStyle(
-                fontSize = 22.sp
-            ),
-            color = textColor
-        )
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(Color.Transparent)
+                    .padding(10.dp)
+            ) {
+                if (isLoading.value) {
+                    Spacer(modifier = Modifier.height(7.dp))
+                    CircularProgressIndicator(
+                        color = textColor,
+                        strokeWidth = 5.dp,
+                        modifier = Modifier
+                            .size(90.dp)
+                            .align(Alignment.Center)
+                    )
+                } else {
+                    val state = rememberLazyListState()
+                    val refresh = remember { mutableStateOf(false) }
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                            .background(Color.Transparent)
+                            .padding(10.dp)
+                            .padding(bottom = 30.dp)
+                    ) {
+                        ShowRestaurants(state = state, restaurants = restaurants, refresh = refresh)
+
+                        VerticalScrollbar(
+                            modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                            adapter = rememberScrollbarAdapter(
+                                scrollState = state
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 }
