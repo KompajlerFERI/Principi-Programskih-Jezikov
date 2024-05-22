@@ -13,10 +13,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import interface_components.content.*
+import scraper.Restaurant
 
 @Composable
 fun ContentSwitcher(
     clicked: MutableState<Boolean>,
+    restaurants: MutableState<List<Restaurant>>,
+    isLoading: MutableState<Boolean>,
     currentContent: ContentSwitch
 ) {
     Box(
@@ -38,13 +41,13 @@ fun ContentSwitcher(
         if (clicked.value || !clicked.value ) {
             when (currentContent) {
                 ContentSwitch.AddRestaurants -> AddRestaurant()
-                ContentSwitch.Restaurants -> Restaurants()
-                ContentSwitch.Scraper -> Scraper()
+                ContentSwitch.Restaurants -> Restaurants(restaurants, isLoading)
+                ContentSwitch.Scraper -> Scraper(restaurants, isLoading)
                 ContentSwitch.Generate -> Generate()
                 ContentSwitch.About -> About()
-                else -> ErrorContent()
+                ContentSwitch.ErrorContent -> ErrorContent()
             }
         }
-        else Restaurants()
+        else Restaurants(restaurants, isLoading)
     }
 }

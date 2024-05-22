@@ -5,5 +5,6 @@ enum class ContentSwitch {
     Restaurants,
     Scraper,
     Generate,
-    About
+    About,
+    ErrorContent
 }
