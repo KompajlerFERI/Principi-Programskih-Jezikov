@@ -24,13 +24,19 @@ import interface_components.gradientColorDarker
 import interface_components.gradientColorLighter
 import interface_components.textColor
 import scraper.Restaurant
-import util.RestaurantUtil.isValidWorkingTimes
 
 @Composable
 @Preview
-fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, onClickDelete: () -> Unit) {
+fun RestaurantItem(
+    refresh: MutableState<Boolean>,
+    restaurant: Restaurant,
+    onEditClick: (Restaurant) -> Unit,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     val editRestaurant = remember { mutableStateOf(false) }
+    val editMenu = remember { mutableStateOf(false) }
 
     // Define mutable state variables for editable fields
     var editedName by remember { mutableStateOf(restaurant.name) }
@@ -38,6 +44,8 @@ fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, on
     var editedPayPrice by remember { mutableStateOf(restaurant.payPrice) }
     var editedPhoneNumber by remember { mutableStateOf(restaurant.phoneNumber) }
     var editedWorkingTimes by remember { mutableStateOf(restaurant.workingTimes.joinToString("\n")) }
+
+    val menus = remember { mutableStateOf(restaurant.menuList) }
 
     // Everything is inside this column
     Column(
@@ -62,11 +70,13 @@ fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, on
             .background(Color.White.copy(alpha = 0.3f))
             .clickable { expanded = !expanded }
     ) {
+        // If not editing, show restaurant fields
         if (!editRestaurant.value) {
-        // Row with restaurant name, address, pay price, phone number, dropdown, edit and delete buttons
+            // Row with restaurant name, address, pay price, phone number, dropdown, edit and delete buttons
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                // Display restaurant fields
                 Column(
                     modifier = Modifier
                         .weight(10f)
@@ -147,14 +157,31 @@ fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, on
                     }
                 }
 
+                // Save button
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    IconButton(onClick = {
+                        onSaveClick()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = textColor
+                        )
+                    }
+                }
+
                 // Delete button
                 Column(
                     modifier = Modifier
-                        .weight(1.4f)
+                        .weight(1.2f)
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = {onClickDelete()}) {
+                    IconButton(onClick = { onDeleteClick() }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
@@ -164,10 +191,12 @@ fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, on
                 }
             }
         }
+        // If editing, show editable fields
         else {
             // Editable restaurant fields
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier
@@ -209,24 +238,14 @@ fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, on
                         .align(Alignment.CenterVertically)
                 ) {
                     IconButton(onClick = {
-                        // Check if working times are valid
-
-                        val editedWorkingTimesList: MutableList<String> = if (isValidWorkingTimes(editedWorkingTimes)) {
-                            editedWorkingTimes.split("\n").toMutableList()
-                        } else {
-                            restaurant.workingTimes.toMutableList()
-                        }
-
-                        editedWorkingTimes = editedWorkingTimesList.joinToString("\n")
-
                         // Create a new restaurant object with edited fields
                         val editedRestaurant = Restaurant(
                             name = editedName,
                             address = editedAddress,
                             payPrice = editedPayPrice,
                             phoneNumber = editedPhoneNumber,
-                            workingTimes = editedWorkingTimesList,
-                            menuList = restaurant.menuList
+                            workingTimes = editedWorkingTimes.split("\n").toMutableList(),
+                            menuList = menus.value.toMutableList()
                         )
 
                         onEditClick(editedRestaurant) // Call the edit callback with the edited restaurant
@@ -242,51 +261,48 @@ fun RestaurantItem(restaurant: Restaurant, onEditClick: (Restaurant) -> Unit, on
                 }
             }
         }
-        // If expanded, show working times and menu
+
         // If expanded, show working times and menu
         if (expanded) {
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 0.dp, 16.dp, 16.dp)
             ) {
-                Column(
-                    modifier = Modifier.weight(8f)
-                ) {
-                    Text(
-                        text = "Delavni čas:\n" + restaurant.workingTimes.joinToString("\n"),
-                        color = textColor,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
-                            )
+                // Display working times
+                Text(
+                    text = "Delavni čas:\n" + restaurant.workingTimes.joinToString("\n"),
+                    color = textColor,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        shadow = Shadow(
+                            color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
                         )
                     )
-                    restaurant.menuList.forEach { menu ->
-                        Text(
-                            text = menu.dish,
-                            color = textColor,
-                            style = TextStyle(fontSize = 13.sp)
+                )
+
+                // Display menu
+                    menus.value.forEach { menu ->
+                        MenuItem(
+                            menu = menu,
+                            onEditClick = { editedMenu ->
+                                val index = menus.value.indexOf(menu)
+                                if (index != -1) {
+                                    val updatedMenus = menus.value.toMutableList()
+                                    updatedMenus[index] = editedMenu
+                                    menus.value = updatedMenus
+                                    restaurant.menuList = updatedMenus
+                                    editMenu.value = false
+                                }
+                            },
+                            onDeleteClick = {
+                                val updatedMenus = menus.value.apply { remove(menu) }
+                                menus.value = updatedMenus
+                                restaurant.menuList = updatedMenus
+                            }
                         )
                     }
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(2f)
-                        .fillMaxHeight()
-                        .align(Alignment.CenterVertically),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    IconButton(onClick = { editRestaurant.value = !editRestaurant.value }) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit menu and working times",
-                            tint = textColor
-                        )
-                    }
-                }
+
             }
         }
     }

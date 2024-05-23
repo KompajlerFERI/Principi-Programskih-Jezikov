@@ -41,13 +41,18 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            var enabled = remember { mutableStateOf(true) }
+
             Button(
+                enabled = enabled.value,
                 onClick = {
                     coroutineScope.launch {
                         isLoading.value = true
                         val scrapedRestaurants = withContext(Dispatchers.IO) {
                             val scraper = Scraper()
+                            enabled.value = false
                             scraper.scrape()
+                            enabled.value = true
                             RestaurantList.restaurants
                         }
                         restaurants.value = scrapedRestaurants
@@ -100,7 +105,6 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             var customPadding = if (isLoading.value) 72.dp else 0.dp
             Box(
                 modifier = Modifier.fillMaxSize()
@@ -122,7 +126,6 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                 else {
                     val state = rememberLazyListState()
                     val refresh = remember { mutableStateOf(false) }
-                    val edit = remember { mutableStateOf(false) }
                     LazyColumn(
                         Modifier
                             .fillMaxSize()
@@ -131,11 +134,8 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                     ) {
                         items(restaurants.value) { restaurant ->
                             RestaurantItem(
+                                refresh = refresh,
                                 restaurant = restaurant,
-                                onClickDelete = {
-                                    restaurants.value = restaurants.value.toMutableList().apply { remove(restaurant) }
-                                    refresh.value = !refresh.value
-                                },
                                 onEditClick = { editedRestaurant ->
                                     // Find and update the edited restaurant
                                     val index = restaurants.value.indexOf(restaurant)
@@ -145,6 +145,14 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                                         restaurants.value = updatedList
                                         refresh.value = !refresh.value
                                     }
+                                },
+                                onSaveClick = {
+                                    // TODO: Save the restaurant to the database
+                                },
+                                onDeleteClick = {
+                                    // Remove the restaurant from the list
+                                    restaurants.value = restaurants.value.toMutableList().apply { remove(restaurant) }
+                                    refresh.value = !refresh.value
                                 }
                             )
                         }
