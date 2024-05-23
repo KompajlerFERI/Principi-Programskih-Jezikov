@@ -7,8 +7,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import scraper.Restaurant
@@ -16,7 +14,6 @@ import scraper.Restaurant
 @Composable
 fun ShowRestaurants(state: LazyListState, restaurants: MutableState<List<Restaurant>>, refresh: MutableState<Boolean>) {
     if (refresh.value || !refresh.value) {
-        val editRestaurant = remember { mutableStateOf(false) }
         LazyColumn(
             Modifier
                 .fillMaxSize()
@@ -25,6 +22,7 @@ fun ShowRestaurants(state: LazyListState, restaurants: MutableState<List<Restaur
         ) {
             items(restaurants.value) { restaurant ->
                 RestaurantItem(
+                    refresh = refresh,
                     restaurant = restaurant,
                     onEditClick = { editedRestaurant ->
                         // Find and update the edited restaurant

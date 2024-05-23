@@ -134,6 +134,7 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                     ) {
                         items(restaurants.value) { restaurant ->
                             RestaurantItem(
+                                refresh = refresh,
                                 restaurant = restaurant,
                                 onEditClick = { editedRestaurant ->
                                     // Find and update the edited restaurant
