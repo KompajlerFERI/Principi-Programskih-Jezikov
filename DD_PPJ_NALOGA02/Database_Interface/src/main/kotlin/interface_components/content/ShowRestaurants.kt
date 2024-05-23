@@ -26,10 +26,6 @@ fun ShowRestaurants(state: LazyListState, restaurants: MutableState<List<Restaur
             items(restaurants.value) { restaurant ->
                 RestaurantItem(
                     restaurant = restaurant,
-                    onClickDelete = {
-                        restaurants.value = restaurants.value.toMutableList().apply { remove(restaurant) }
-                        refresh.value = !refresh.value
-                    },
                     onEditClick = { editedRestaurant ->
                         // Find and update the edited restaurant
                         val index = restaurants.value.indexOf(restaurant)
@@ -39,6 +35,13 @@ fun ShowRestaurants(state: LazyListState, restaurants: MutableState<List<Restaur
                             restaurants.value = updatedList
                             refresh.value = !refresh.value
                         }
+                    },
+                    onSaveClick = {
+                        // TODO: Save the restaurant to the database
+                    },
+                    onDeleteClick = {
+                        restaurants.value = restaurants.value.toMutableList().apply { remove(restaurant) }
+                        refresh.value = !refresh.value
                     }
                 )
             }
