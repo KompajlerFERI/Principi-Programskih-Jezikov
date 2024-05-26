@@ -41,7 +41,7 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            var enabled = remember { mutableStateOf(true) }
+            val enabled = remember { mutableStateOf(true) }
 
             Button(
                 enabled = enabled.value,
@@ -55,7 +55,7 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                             enabled.value = true
                             RestaurantList.restaurants
                         }
-                        restaurants.value = scrapedRestaurants
+                        restaurants.value = restaurants.value + scrapedRestaurants
                         isLoading.value = false
                     }
                 },
@@ -105,7 +105,7 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            var customPadding = if (isLoading.value) 72.dp else 0.dp
+            val customPadding = if (isLoading.value) 72.dp else 0.dp
             Box(
                 modifier = Modifier.fillMaxSize()
                     .background(Color.Transparent)
