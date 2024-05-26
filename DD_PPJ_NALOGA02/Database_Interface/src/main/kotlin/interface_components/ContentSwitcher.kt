@@ -40,7 +40,7 @@ fun ContentSwitcher(
     ) {
         if (clicked.value || !clicked.value ) {
             when (currentContent) {
-                ContentSwitch.AddRestaurants -> AddRestaurant()
+                ContentSwitch.AddRestaurants -> AddRestaurant(restaurants)
                 ContentSwitch.Restaurants -> Restaurants(restaurants, isLoading)
                 ContentSwitch.Scraper -> Scraper(restaurants, isLoading)
                 ContentSwitch.Generate -> Generate(restaurants)
