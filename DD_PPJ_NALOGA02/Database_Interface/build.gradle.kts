@@ -6,11 +6,11 @@ plugins {
 }
 
 group = "org.example"
-version = "1.0-SNAPSHOT"
+version = "1.6.0"
 
 repositories {
     mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev",)
     google()
 }
 
@@ -22,6 +22,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("it.skrape:skrapeit:1.2.2")
     implementation("it.skrape:skrapeit:0-SNAPSHOT") { isChanging = true }
+    implementation("io.github.serpro69:kotlin-faker:$version")
 
 }
 
