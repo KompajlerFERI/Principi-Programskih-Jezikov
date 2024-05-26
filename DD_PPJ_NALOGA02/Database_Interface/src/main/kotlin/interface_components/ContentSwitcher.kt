@@ -43,7 +43,7 @@ fun ContentSwitcher(
                 ContentSwitch.AddRestaurants -> AddRestaurant()
                 ContentSwitch.Restaurants -> Restaurants(restaurants, isLoading)
                 ContentSwitch.Scraper -> Scraper(restaurants, isLoading)
-                ContentSwitch.Generate -> Generate()
+                ContentSwitch.Generate -> Generate(restaurants)
                 ContentSwitch.About -> About()
                 ContentSwitch.ErrorContent -> ErrorContent()
             }
