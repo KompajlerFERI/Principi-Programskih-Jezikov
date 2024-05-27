@@ -30,98 +30,113 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .width(70.dp),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(0.6f)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Generate Random Restaurants",
-                style = TextStyle(fontSize = 22.sp),
-                color = textColor
-            )
-
-            TextField(
-                value = restaurantCount,
-                onValueChange = { restaurantCount = it },
-                label = { Text("Number of Restaurants") },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TextField(
-                value = menuCount,
-                onValueChange = { menuCount = it },
-                label = { Text("Number of Menus per Restaurant") },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                TextField(
-                    value = minPrice,
-                    onValueChange = { minPrice = it },
-                    label = { Text("Minimum Price") },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
+                Text(
+                    text = "Generate Random Restaurants",
+                    style = TextStyle(fontSize = 22.sp),
+                    color = textColor
                 )
 
                 TextField(
-                    value = maxPrice,
-                    onValueChange = { maxPrice = it },
-                    label = { Text("Maximum Price") },
+                    value = restaurantCount,
+                    onValueChange = { restaurantCount = it },
+                    label = { Text("Number of Restaurants") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextField(
-                    value = latitude,
-                    onValueChange = { latitude = it },
-                    label = { Text("Latitude") },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 TextField(
-                    value = longitude,
-                    onValueChange = { longitude = it },
-                    label = { Text("Longitude") },
+                    value = menuCount,
+                    onValueChange = { menuCount = it },
+                    label = { Text("Number of Menus per Restaurant") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.fillMaxWidth()
                 )
-            }
 
-            TextField(
-                value = radius,
-                onValueChange = { radius = it },
-                label = { Text("Radius") },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextField(
+                        value = minPrice,
+                        onValueChange = { minPrice = it },
+                        label = { Text("Minimum Price") },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.weight(1f)
+                    )
 
-            Button(onClick = {
-                val count = restaurantCount.toIntOrNull() ?: 1
-                val menuPerRestaurant = menuCount.toIntOrNull() ?: 5
-                val min = minPrice.toFloatOrNull() ?: 2.00f
-                val max = maxPrice.toFloatOrNull() ?: 20.00f
-                val newRestaurants = GenerateUtil.generateRandomRestaurants(count, menuPerRestaurant, min, max, latitude.toDouble(), longitude.toDouble(), radius.toDouble())
-                restaurants.value = restaurants.value + newRestaurants
-            }) {
-                Text("Generate")
+                    TextField(
+                        value = maxPrice,
+                        onValueChange = { maxPrice = it },
+                        label = { Text("Maximum Price") },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextField(
+                        value = latitude,
+                        onValueChange = { latitude = it },
+                        label = { Text("Latitude") },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    TextField(
+                        value = longitude,
+                        onValueChange = { longitude = it },
+                        label = { Text("Longitude") },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                TextField(
+                    value = radius,
+                    onValueChange = { radius = it },
+                    label = { Text("Radius") },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Button(onClick = {
+                    val count = restaurantCount.toIntOrNull() ?: 1
+                    val menuPerRestaurant = menuCount.toIntOrNull() ?: 5
+                    val min = minPrice.toFloatOrNull() ?: 2.00f
+                    val max = maxPrice.toFloatOrNull() ?: 20.00f
+                    val newRestaurants = GenerateUtil.generateRandomRestaurants(
+                        count,
+                        menuPerRestaurant,
+                        min,
+                        max,
+                        latitude.toDouble(),
+                        longitude.toDouble(),
+                        radius.toDouble()
+                    )
+                    restaurants.value = restaurants.value + newRestaurants
+                }) {
+                    Text("Generate")
+                }
             }
         }
     }

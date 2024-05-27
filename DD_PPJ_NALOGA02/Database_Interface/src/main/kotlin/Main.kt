@@ -70,7 +70,7 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, title = "Studentska prehrana vmesnik") {
         App()
     }
 }

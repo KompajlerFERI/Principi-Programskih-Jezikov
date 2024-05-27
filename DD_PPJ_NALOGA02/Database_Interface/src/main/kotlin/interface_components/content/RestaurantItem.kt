@@ -2,6 +2,8 @@ package interface_components.content
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -281,8 +283,9 @@ fun RestaurantItem(
                     )
                 )
 
-                // Display menu
-                    menus.value.forEach { menu ->
+                // Display menu using LazyColumn
+                LazyColumn {
+                    items(menus.value) { menu ->
                         MenuItem(
                             menu = menu,
                             onEditClick = { editedMenu ->
@@ -296,13 +299,13 @@ fun RestaurantItem(
                                 }
                             },
                             onDeleteClick = {
-                                val updatedMenus = menus.value.apply { remove(menu) }
+                                val updatedMenus = menus.value.toMutableList().apply { remove(menu) }
                                 menus.value = updatedMenus
                                 restaurant.menuList = updatedMenus
                             }
                         )
                     }
-
+                }
             }
         }
     }
