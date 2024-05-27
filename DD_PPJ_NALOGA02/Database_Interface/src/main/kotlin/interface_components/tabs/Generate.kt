@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +55,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                     onValueChange = { restaurantCount = it },
                     label = { Text("Number of Restaurants") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(color = textColor),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = textColor.copy(alpha = 0.3f),
+                        focusedLabelColor = textColor,
+                        unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                    )
                 )
 
                 TextField(
@@ -62,7 +69,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                     onValueChange = { menuCount = it },
                     label = { Text("Number of Menus per Restaurant") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(color = textColor),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = textColor.copy(alpha = 0.3f),
+                        focusedLabelColor = textColor,
+                        unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                    )
                 )
 
                 Row(
@@ -75,7 +88,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                         onValueChange = { minPrice = it },
                         label = { Text("Minimum Price") },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        textStyle = TextStyle(color = textColor),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = textColor.copy(alpha = 0.3f),
+                            focusedLabelColor = textColor,
+                            unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                        )
                     )
 
                     TextField(
@@ -83,7 +102,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                         onValueChange = { maxPrice = it },
                         label = { Text("Maximum Price") },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        textStyle = TextStyle(color = textColor),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = textColor.copy(alpha = 0.3f),
+                            focusedLabelColor = textColor,
+                            unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                        )
                     )
                 }
 
@@ -97,7 +122,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                         onValueChange = { latitude = it },
                         label = { Text("Latitude") },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        textStyle = TextStyle(color = textColor),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = textColor.copy(alpha = 0.3f),
+                            focusedLabelColor = textColor,
+                            unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                        )
                     )
 
                     TextField(
@@ -105,7 +136,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                         onValueChange = { longitude = it },
                         label = { Text("Longitude") },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        textStyle = TextStyle(color = textColor),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = textColor.copy(alpha = 0.3f),
+                            focusedLabelColor = textColor,
+                            unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                        )
                     )
                 }
 
@@ -114,7 +151,13 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                     onValueChange = { radius = it },
                     label = { Text("Radius") },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(color = textColor),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = textColor.copy(alpha = 0.3f),
+                        focusedLabelColor = textColor,
+                        unfocusedLabelColor = textColor.copy(alpha = 0.75f)
+                    )
                 )
 
                 Button(onClick = {

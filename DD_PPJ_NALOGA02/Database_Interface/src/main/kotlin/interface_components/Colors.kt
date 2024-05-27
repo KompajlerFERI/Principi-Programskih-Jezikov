@@ -12,3 +12,4 @@ val elementGradientColorLighter = Color(0xFFc2f6ff)
 val elementGradientColorDarker = Color(0xFF8ef2fa)
 val innerElementsTextColorLighter = Color(0xFF30c3fe)
 val innerElementsTextColorDarker = Color(0xFF009ede)
+val errorColor = Color.Red

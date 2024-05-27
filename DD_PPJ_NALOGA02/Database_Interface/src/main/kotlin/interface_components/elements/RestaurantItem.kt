@@ -26,6 +26,7 @@ import interface_components.gradientColorDarker
 import interface_components.gradientColorLighter
 import interface_components.textColor
 import scraper.Restaurant
+import util.ValidityUtil
 
 @Composable
 @Preview
@@ -43,6 +44,9 @@ fun RestaurantItem(
     // Define mutable state variables for editable fields
     var editedName by remember { mutableStateOf(restaurant.name) }
     var editedAddress by remember { mutableStateOf(restaurant.address) }
+    var editedFullPrice by remember { mutableStateOf(restaurant.fullPrice) }
+    var editedLongitude by remember { mutableStateOf(restaurant.longitude) }
+    var editedLatitude by remember { mutableStateOf(restaurant.latitude) }
     var editedPayPrice by remember { mutableStateOf(restaurant.payPrice) }
     var editedPhoneNumber by remember { mutableStateOf(restaurant.phoneNumber) }
     var editedWorkingTimes by remember { mutableStateOf(restaurant.workingTimes.joinToString("\n")) }
@@ -222,6 +226,21 @@ fun RestaurantItem(
                         label = { Text("Pay Price") }
                     )
                     TextField(
+                        value = editedFullPrice,
+                        onValueChange = { editedFullPrice = it },
+                        label = { Text("Full Price") }
+                    )
+                    TextField(
+                        value = editedLatitude,
+                        onValueChange = { editedLatitude = it },
+                        label = { Text("Latitude") }
+                    )
+                    TextField(
+                        value = editedLongitude,
+                        onValueChange = { editedLongitude = it },
+                        label = { Text("Longitude") }
+                    )
+                    TextField(
                         value = editedPhoneNumber,
                         onValueChange = { editedPhoneNumber = it },
                         label = { Text("Phone Number") }
@@ -240,22 +259,44 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                 ) {
                     IconButton(onClick = {
-                        // Create a new restaurant object with edited fields
-                        val editedRestaurant = Restaurant(
-                            name = editedName,
-                            address = editedAddress,
-                            payPrice = editedPayPrice,
-                            phoneNumber = editedPhoneNumber,
-                            workingTimes = editedWorkingTimes.split("\n").toMutableList(),
-                            menuList = menus.value.toMutableList()
-                        )
+                        if(
+                            editedName.length > 0 &&
+                            editedPayPrice.toFloatOrNull() != null &&
+                            editedAddress.length > 0 &&
+                            editedPhoneNumber.length > 0 &&
+                            ValidityUtil.isValidPhoneNumber(editedPhoneNumber) &&
+                            editedWorkingTimes.length > 0 &&
+                            ValidityUtil.isValidWorkingHours(editedWorkingTimes)
+                        ) {
+                            // Create a new restaurant object with edited fields
+                            val editedRestaurant = Restaurant(
+                                name = editedName,
+                                address = editedAddress,
+                                payPrice = editedPayPrice,
+                                fullPrice = editedFullPrice,
+                                latitude = editedLatitude,
+                                longitude = editedLongitude,
+                                phoneNumber = editedPhoneNumber,
+                                workingTimes = editedWorkingTimes.split("\n").toMutableList(),
+                                menuList = menus.value.toMutableList()
+                            )
 
-                        onEditClick(editedRestaurant) // Call the edit callback with the edited restaurant
-                        expanded = false // Collapse the item after editing
-                        editRestaurant.value = false
+                            onEditClick(editedRestaurant) // Call the edit callback with the edited restaurant
+                            expanded = false // Collapse the item after editing
+                            editRestaurant.value = false
+                        }
                     }) {
                         Icon(
                             imageVector = Icons.Default.Done,
+                            contentDescription = null,
+                            tint = textColor
+                        )
+                    }
+                    IconButton(onClick = {
+                        editRestaurant.value = false
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
                             contentDescription = null,
                             tint = textColor
                         )
