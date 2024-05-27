@@ -1,4 +1,4 @@
-package interface_components.content
+package interface_components.tabs
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text

@@ -1,4 +1,4 @@
-package interface_components.content
+package interface_components.elements
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

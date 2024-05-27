@@ -1,4 +1,4 @@
-package interface_components.content
+package interface_components.elements
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background

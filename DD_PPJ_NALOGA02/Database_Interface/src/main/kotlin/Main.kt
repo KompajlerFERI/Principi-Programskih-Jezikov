@@ -25,8 +25,6 @@ fun App() {
     val restaurants = remember { mutableStateOf(listOf<Restaurant>()) }
     val isLoading = remember { mutableStateOf(false) }
 
-    val Faker = Faker();
-
     // Znotraj row-a je nav bar in content stran ob strani
     Row(
         Modifier

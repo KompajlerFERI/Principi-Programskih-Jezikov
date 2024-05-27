@@ -1,4 +1,4 @@
-package interface_components.content
+package interface_components.elements
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon

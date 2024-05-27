@@ -1,4 +1,4 @@
-package interface_components.content
+package interface_components.tabs
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import interface_components.textColor
 import scraper.Restaurant
-import scraper.Menu
 import util.GenerateUtil
-import kotlin.random.Random
 
 @Composable
 fun Generate(restaurants: MutableState<List<Restaurant>>) {
