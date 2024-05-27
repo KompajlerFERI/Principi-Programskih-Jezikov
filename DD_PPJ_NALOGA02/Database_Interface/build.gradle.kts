@@ -31,7 +31,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "DatabaseInterface"
+            packageName = "Database_Interface"
             packageVersion = "1.0.0"
         }
     }

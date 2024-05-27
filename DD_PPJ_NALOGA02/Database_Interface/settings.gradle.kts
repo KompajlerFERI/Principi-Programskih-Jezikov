@@ -10,4 +10,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "DatabaseInterface"
+rootProject.name = "Database_Interface"

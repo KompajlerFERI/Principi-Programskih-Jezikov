@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import interface_components.*
+import io.github.serpro69.kfaker.Faker
 import scraper.Restaurant
 
 @Composable
@@ -23,6 +24,8 @@ fun App() {
     var currentContent by remember { mutableStateOf(ContentSwitch.Scraper) }
     val restaurants = remember { mutableStateOf(listOf<Restaurant>()) }
     val isLoading = remember { mutableStateOf(false) }
+
+    val Faker = Faker();
 
     // Znotraj row-a je nav bar in content stran ob strani
     Row(
