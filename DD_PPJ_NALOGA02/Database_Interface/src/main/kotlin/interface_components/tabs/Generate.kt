@@ -30,7 +30,7 @@ import util.GenerateUtil
 import util.ValidityUtil
 
 @Composable
-fun Generate(restaurants: MutableState<List<Restaurant>>) {
+fun Generate(restaurants: MutableList<Restaurant>) {
     var restaurantCount by remember { mutableStateOf("1") }
     var menuCount by remember { mutableStateOf("5") }
     var minPrice by remember { mutableStateOf("2.00") }
@@ -191,7 +191,12 @@ fun Generate(restaurants: MutableState<List<Restaurant>>) {
                                 longitude.toDouble(),
                                 radius.toDouble()
                             )
-                            restaurants.value = restaurants.value + newRestaurants
+                            for (newRestaurant in newRestaurants) {
+
+                                // TODO: Add the new restaurants to the database
+
+                                restaurants.add(newRestaurant)
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                         contentPadding = PaddingValues(),

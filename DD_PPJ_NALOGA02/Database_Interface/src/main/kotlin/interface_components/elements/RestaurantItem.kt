@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import interface_components.gradientColorDarker
 import interface_components.gradientColorLighter
 import interface_components.textColor
-import scraper.Menu
 import scraper.Restaurant
 import util.CalculateUtil
 import util.ValidityUtil
@@ -36,7 +35,6 @@ fun RestaurantItem(
     refresh: MutableState<Boolean>,
     restaurant: Restaurant,
     onEditClick: (Restaurant) -> Unit,
-    onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -165,23 +163,6 @@ fun RestaurantItem(
                     }
                 }
 
-                // Save button
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .align(Alignment.CenterVertically)
-                ) {
-                    IconButton(onClick = {
-                        onSaveClick()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            tint = textColor
-                        )
-                    }
-                }
-
                 // Delete button
                 Column(
                     modifier = Modifier
@@ -280,7 +261,8 @@ fun RestaurantItem(
                                 longitude = editedLongitude,
                                 phoneNumber = editedPhoneNumber,
                                 workingTimes = editedWorkingTimes.split("\n").toMutableList(),
-                                menuList = menus.value.toMutableList()
+                                menuList = menus.value.toMutableList(),
+                                scrapped = restaurant.scrapped
                             )
 
                             onEditClick(editedRestaurant) // Call the edit callback with the edited restaurant

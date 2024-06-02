@@ -12,7 +12,18 @@ import androidx.compose.ui.unit.dp
 import scraper.Restaurant
 
 @Composable
-fun ShowRestaurants(state: LazyListState, restaurants: MutableState<List<Restaurant>>, refresh: MutableState<Boolean>) {
+fun ShowRestaurants(
+    state: LazyListState,
+    restaurants: MutableList<Restaurant>,
+    refresh: MutableState<Boolean>,
+    showScrappedOnly: Boolean = false
+) {
+    val displayedRestaurants = if (showScrappedOnly) {
+        restaurants.filter { it.scrapped }
+    } else {
+        restaurants
+    }
+
     if (refresh.value || !refresh.value) {
         LazyColumn(
             Modifier
@@ -20,25 +31,26 @@ fun ShowRestaurants(state: LazyListState, restaurants: MutableState<List<Restaur
                 .padding(end = 12.dp),
             state
         ) {
-            items(restaurants.value) { restaurant ->
+            items(displayedRestaurants)  { restaurant ->
                 RestaurantItem(
                     refresh = refresh,
                     restaurant = restaurant,
                     onEditClick = { editedRestaurant ->
                         // Find and update the edited restaurant
-                        val index = restaurants.value.indexOf(restaurant)
+                        val index = restaurants.indexOf(restaurant)
                         if (index != -1) {
-                            val updatedList = restaurants.value.toMutableList()
-                            updatedList[index] = editedRestaurant
-                            restaurants.value = updatedList
+                            restaurants[index] = editedRestaurant
+
+                            // TODO: Edit the restaurant in the database
+
                             refresh.value = !refresh.value
                         }
                     },
-                    onSaveClick = {
-                        // TODO: Save the restaurant to the database
-                    },
                     onDeleteClick = {
-                        restaurants.value = restaurants.value.toMutableList().apply { remove(restaurant) }
+                        restaurants.remove(restaurant)
+
+                        // TODO: Delete the restaurant in the database
+
                         refresh.value = !refresh.value
                     }
                 )

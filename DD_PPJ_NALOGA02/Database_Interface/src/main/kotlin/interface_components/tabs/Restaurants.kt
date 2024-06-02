@@ -14,7 +14,7 @@ import interface_components.elements.ShowRestaurants
 import scraper.Restaurant
 
 @Composable
-fun Restaurants(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState<Boolean>) {
+fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolean>) {
     Box(
         modifier = Modifier
             .fillMaxSize()

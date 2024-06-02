@@ -23,7 +23,8 @@ object GenerateUtil {
                 workingTimes = generateRandomWorkingTimes(),
                 latitude = lat.toString(),
                 longitude = lon.toString(),
-                menuList = generateRandomMenus(menuPerRestaurant).toMutableList()
+                menuList = generateRandomMenus(menuPerRestaurant).toMutableList(),
+                scrapped = false
             )
             randomRestaurants.add(restaurant)
         }

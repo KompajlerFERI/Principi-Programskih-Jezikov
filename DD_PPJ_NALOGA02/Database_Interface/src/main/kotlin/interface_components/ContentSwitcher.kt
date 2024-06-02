@@ -18,7 +18,7 @@ import scraper.Restaurant
 @Composable
 fun ContentSwitcher(
     clicked: MutableState<Boolean>,
-    restaurants: MutableState<List<Restaurant>>,
+    restaurants: MutableList<Restaurant>,
     isLoading: MutableState<Boolean>,
     currentContent: ContentSwitch
 ) {

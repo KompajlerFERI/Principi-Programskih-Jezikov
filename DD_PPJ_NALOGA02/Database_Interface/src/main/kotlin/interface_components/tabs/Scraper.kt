@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import interface_components.*
 import interface_components.elements.RestaurantItem
+import interface_components.elements.ShowRestaurants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,7 +29,7 @@ import scraper.RestaurantList
 import scraper.Scraper
 
 @Composable
-fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState<Boolean>) {
+fun Scraper(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolean>) {
     val coroutineScope = rememberCoroutineScope()
     Box(
         modifier = Modifier
@@ -44,11 +45,19 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
         ) {
             val enabled = remember { mutableStateOf(true) }
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             Button(
                 enabled = enabled.value,
                 onClick = {
+                    restaurants.removeIf({ it.scrapped })
+                    RestaurantList.restaurants.removeIf({ it.scrapped })
+
+                    // TODO: Delete all the previously scrapped restaurants in the database
+
                     coroutineScope.launch {
                         isLoading.value = true
+
                         val scrapedRestaurants = withContext(Dispatchers.IO) {
                             val scraper = Scraper()
                             enabled.value = false
@@ -56,7 +65,11 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                             enabled.value = true
                             RestaurantList.restaurants
                         }
-                        restaurants.value = restaurants.value + scrapedRestaurants
+
+                        // TODO: Add the newly scraped restaurants to the database
+
+                        restaurants.addAll(scrapedRestaurants)
+
                         isLoading.value = false
                     }
                 },
@@ -119,44 +132,21 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                 else {
                     val state = rememberLazyListState()
                     val refresh = remember { mutableStateOf(false) }
-                    LazyColumn(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(end = 12.dp),
-                        state
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                            .background(Color.Transparent)
+                            .padding(10.dp)
+                            .padding(bottom = 30.dp)
                     ) {
-                        items(restaurants.value) { restaurant ->
-                            RestaurantItem(
-                                refresh = refresh,
-                                restaurant = restaurant,
-                                onEditClick = { editedRestaurant ->
-                                    // Find and update the edited restaurant
-                                    val index = restaurants.value.indexOf(restaurant)
-                                    if (index != -1) {
-                                        val updatedList = restaurants.value.toMutableList()
-                                        updatedList[index] = editedRestaurant
-                                        restaurants.value = updatedList
-                                        refresh.value = !refresh.value
-                                    }
-                                },
-                                onSaveClick = {
-                                    // TODO: Save the restaurant to the database
-                                },
-                                onDeleteClick = {
-                                    // Remove the restaurant from the list
-                                    restaurants.value = restaurants.value.toMutableList().apply { remove(restaurant) }
-                                    refresh.value = !refresh.value
-                                }
-                            )
-                        }
-                    }
+                        ShowRestaurants(state = state, restaurants = restaurants, refresh = refresh, showScrappedOnly = true)
 
-                    VerticalScrollbar(
-                        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                        adapter = rememberScrollbarAdapter(
-                            scrollState = state
+                        VerticalScrollbar(
+                            modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                            adapter = rememberScrollbarAdapter(
+                                scrollState = state
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

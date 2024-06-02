@@ -22,7 +22,7 @@ import scraper.Restaurant
 fun App() {
     val clickedNavButton = remember { mutableStateOf(false) }
     var currentContent by remember { mutableStateOf(ContentSwitch.Scraper) }
-    val restaurants = remember { mutableStateOf(listOf<Restaurant>()) }
+    var restaurants = remember { mutableListOf<Restaurant>() }
     val isLoading = remember { mutableStateOf(false) }
 
     // Znotraj row-a je nav bar in content stran ob strani

@@ -18,7 +18,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -32,7 +31,7 @@ import scraper.Menu
 import util.ValidityUtil
 
 @Composable
-fun AddRestaurant(restaurants: MutableState<List<Restaurant>>) {
+fun AddRestaurant(restaurants: MutableList<Restaurant>) {
     var restaurantName by remember { mutableStateOf("") }
     var fullPrice by remember { mutableStateOf("0.0") }
     var payPrice by remember { mutableStateOf("0.0") }
@@ -64,8 +63,7 @@ fun AddRestaurant(restaurants: MutableState<List<Restaurant>>) {
             state = state
         ) {
             item {
-
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = "Add Restaurant",
@@ -263,15 +261,15 @@ fun AddRestaurant(restaurants: MutableState<List<Restaurant>>) {
                 Button(
                     onClick = {
                     if(
-                        restaurantName.length > 0 &&
+                        restaurantName.isNotEmpty() &&
                         fullPrice.toFloatOrNull() != null &&
                         payPrice.toFloatOrNull() != null &&
                         longitude.toFloatOrNull() != null &&
                         latitude.toFloatOrNull() != null &&
-                        address.length > 0 &&
-                        phoneNumber.length > 0 &&
+                        address.isNotEmpty()  &&
+                        phoneNumber.isNotEmpty() &&
                         ValidityUtil.isValidPhoneNumber(phoneNumber) &&
-                        workingTimes.size > 0 &&
+                        workingTimes.isNotEmpty() &&
                         ValidityUtil.isValidWorkingHours(workingTimes.joinToString("\n"))
                     ) {
                         isValid = true
@@ -284,9 +282,13 @@ fun AddRestaurant(restaurants: MutableState<List<Restaurant>>) {
                             address = address,
                             phoneNumber = phoneNumber,
                             workingTimes = workingTimes.toMutableList(),
-                            menuList = menuList.value
+                            menuList = menuList.value,
+                            scrapped = false
                         )
-                        restaurants.value = restaurants.value + restaurant
+                        restaurants.add(restaurant)
+
+                        // TODO: Add restaurant to database
+
                     }
                     else isValid = false
                     },
