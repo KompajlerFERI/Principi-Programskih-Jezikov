@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.sp
 import interface_components.gradientColorDarker
 import interface_components.gradientColorLighter
 import interface_components.textColor
+import scraper.Menu
 import scraper.Restaurant
+import util.CalculateUtil
 import util.ValidityUtil
 
 @Composable
@@ -324,8 +326,17 @@ fun RestaurantItem(
                     )
                 )
 
+
                 // Display menu using LazyColumn
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .height(
+                            CalculateUtil.calculateHeight(
+                                restaurant.menuList.size,
+                                68
+                            ).dp
+                        )
+                ) {
                     items(menus.value) { menu ->
                         MenuItem(
                             menu = menu,
