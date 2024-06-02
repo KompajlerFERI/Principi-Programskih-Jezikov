@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import interface_components.*
+import io.github.serpro69.kfaker.Faker
 import scraper.Restaurant
 
 @Composable
@@ -70,7 +71,7 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, title = "Studentska prehrana vmesnik") {
         App()
     }
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import interface_components.content.*
+import interface_components.tabs.*
 import scraper.Restaurant
 
 @Composable
@@ -40,7 +40,7 @@ fun ContentSwitcher(
     ) {
         if (clicked.value || !clicked.value ) {
             when (currentContent) {
-                ContentSwitch.AddRestaurants -> AddRestaurant()
+                ContentSwitch.AddRestaurants -> AddRestaurant(restaurants)
                 ContentSwitch.Restaurants -> Restaurants(restaurants, isLoading)
                 ContentSwitch.Scraper -> Scraper(restaurants, isLoading)
                 ContentSwitch.Generate -> Generate(restaurants)

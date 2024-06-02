@@ -23,7 +23,6 @@ dependencies {
     implementation("it.skrape:skrapeit:1.2.2")
     implementation("it.skrape:skrapeit:0-SNAPSHOT") { isChanging = true }
     implementation("io.github.serpro69:kotlin-faker:$version")
-
 }
 
 compose.desktop {
@@ -32,7 +31,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "DatabaseInterface"
+            packageName = "Database_Interface"
             packageVersion = "1.0.0"
         }
     }
