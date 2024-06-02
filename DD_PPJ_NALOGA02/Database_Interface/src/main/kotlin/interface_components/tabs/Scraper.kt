@@ -1,4 +1,4 @@
-package interface_components.content
+package interface_components.tabs
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import interface_components.*
+import interface_components.elements.RestaurantItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,13 +65,6 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .border(1.dp, textColor, RoundedCornerShape(10.dp))
-                    .background(
-                        brush = Brush.radialGradient(
-                            colors = listOf(gradientColorLighter, gradientColorDarker),
-                            center = Offset(50f, 50f),
-                            radius = 200f
-                        )
-                    )
             ) {
                 Box(
                     modifier = Modifier
@@ -81,25 +75,24 @@ fun Scraper(restaurants: MutableState<List<Restaurant>>, isLoading: MutableState
                                 radius = 70f
                             )
                         )
-                        .padding(horizontal = 20.dp, vertical = 10.dp)
+                        .padding(vertical = 10.dp)
                 ) {
-                    Text(
-                        "Scrape",
-                        style = TextStyle(
-                            fontSize = 19.sp,
-                            brush = Brush.radialGradient(
-                                colors = listOf(innerElementsTextColorLighter, innerElementsTextColorDarker),
-                                center = Offset(30f, 30f),
-                                radius = 60f
-                            ),
-                            shadow = Shadow(
-                                color = Color.Gray,
-                                offset = Offset(0f, 0f),
-                                blurRadius = 0.3f
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                brush = Brush.radialGradient(
+                                    colors = listOf(elementGradientColorLighter, elementGradientColorDarker),
+                                    center = Offset(40f, 40f),
+                                    radius = 70f
+                                )
                             )
+                            .padding(horizontal = 20.dp, vertical = 10.dp)
+                    ) {
+                        Text(
+                            "Scrape",
+                            color = textColorDark
                         )
-
-                    )
+                    }
                 }
             }
 
