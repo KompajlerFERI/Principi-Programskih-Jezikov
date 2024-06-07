@@ -93,9 +93,9 @@ fun RestaurantItem(
                         color = textColor,
                         style = TextStyle(
                             fontSize = 18.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
-                            )
+//                            shadow = Shadow(
+//                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
+//                            )
                         )
                     )
                     Text(
@@ -103,9 +103,9 @@ fun RestaurantItem(
                         color = textColor,
                         style = TextStyle(
                             fontSize = 12.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
-                            )
+//                            shadow = Shadow(
+//                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
+//                            )
                         )
                     )
                     Text(
@@ -113,9 +113,9 @@ fun RestaurantItem(
                         color = textColor,
                         style = TextStyle(
                             fontSize = 14.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
-                            )
+//                            shadow = Shadow(
+//                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
+//                            )
                         )
                     )
                     Text(
@@ -123,9 +123,9 @@ fun RestaurantItem(
                         color = textColor,
                         style = TextStyle(
                             fontSize = 12.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
-                            )
+//                            shadow = Shadow(
+//                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
+//                            )
                         )
                     )
                 }
@@ -302,9 +302,9 @@ fun RestaurantItem(
                     color = textColor,
                     style = TextStyle(
                         fontSize = 12.sp,
-                        shadow = Shadow(
-                            color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
-                        )
+//                        shadow = Shadow(
+//                            color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
+//                        )
                     )
                 )
 

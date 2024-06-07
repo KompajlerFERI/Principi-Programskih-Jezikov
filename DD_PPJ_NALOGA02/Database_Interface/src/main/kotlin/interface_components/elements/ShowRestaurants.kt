@@ -20,6 +20,7 @@ fun ShowRestaurants(
 ) {
     val displayedRestaurants = if (showScrappedOnly) {
         restaurants.filter { it.scrapped }
+
     } else {
         restaurants
     }
@@ -29,6 +30,7 @@ fun ShowRestaurants(
             Modifier
                 .fillMaxSize()
                 .padding(end = 12.dp),
+
             state
         ) {
             items(displayedRestaurants)  { restaurant ->

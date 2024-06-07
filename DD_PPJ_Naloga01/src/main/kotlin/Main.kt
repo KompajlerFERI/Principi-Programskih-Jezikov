@@ -138,6 +138,8 @@ fun main() {
 
     var restaurantList = RestaurantList
 
+    var categoryList = mutableListOf<String>()
+
 
     skrape(HttpFetcher) {
         request {
@@ -244,6 +246,10 @@ fun main() {
                                                         foodCategorysSplit.forEach { category ->
                                                             val trimmedCategory = category.trim()
                                                             menuCategory.add(trimmedCategory)
+
+                                                                if (!categoryList.contains(trimmedCategory)) {
+                                                                    categoryList.add(trimmedCategory)
+                                                                }
                                                         }
                                                     }
                                                 }
@@ -379,6 +385,10 @@ fun main() {
     restaurantList.restaurants.forEach { restaurant ->
         print("=================== RESTAURANTS ===================\n")
         print(restaurant.toString())
+    }
+
+    for (s in categoryList) {
+        println(s)
     }
 }
 
