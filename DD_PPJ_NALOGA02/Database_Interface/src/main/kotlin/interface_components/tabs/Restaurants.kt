@@ -9,14 +9,63 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import interface_components.*
 import interface_components.elements.ShowRestaurants
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import scraper.Restaurant
 import scraper.RestaurantList
 import scraper.*
+import util.DatabaseJsonToClass
+import java.io.IOException
 
 @Composable
 fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolean>) {
+    val client = OkHttpClient()
+
+    var request = Request.Builder()
+        .url("http://localhost:3001/restaurants")
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+        println("=================================RESTAURANTS=================================")
+        val responseBody = response.body!!.string()
+
+        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
+        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
+        val stringList = list.map { Gson().toJson(it) }
+
+        stringList.forEach {
+            DatabaseJsonToClass.JsonToRestaurantClass(it)
+        }
+    }
+
+    request = Request.Builder()
+        .url("http://localhost:3001/menus")
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+        println("=================================MENUS=================================")
+        val responseBody = response.body!!.string()
+
+        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
+        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
+        val stringList = list.map { Gson().toJson(it) }
+
+        stringList.forEach {
+            DatabaseJsonToClass.JsonToMenuItem(it)
+        }
+    }
+
+
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()

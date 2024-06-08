@@ -36,9 +36,9 @@ fun main() {
         // Now stringList is an array of strings, each string is a JSON object
         stringList.forEach {
             DatabaseJsonToClass.JsonToRestaurantClass(it)
-//            val jsonElement = JsonParser.parseString(it)
-//            val prettyJson = GsonBuilder().setPrettyPrinting().create().toJson(jsonElement)
-//            println(prettyJson)
+            val jsonElement = JsonParser.parseString(it)
+            val prettyJson = GsonBuilder().setPrettyPrinting().create().toJson(jsonElement)
+            println(prettyJson)
         }
     }
 
@@ -59,9 +59,9 @@ fun main() {
         // Now stringList is an array of strings, each string is a JSON object
         stringList.forEach {
             DatabaseJsonToClass.JsonToMenuItem(it)
-//            val jsonElement = JsonParser.parseString(it)
-//            val prettyJson = GsonBuilder().setPrettyPrinting().create().toJson(jsonElement)
-//            println(prettyJson)
+            val jsonElement = JsonParser.parseString(it)
+            val prettyJson = GsonBuilder().setPrettyPrinting().create().toJson(jsonElement)
+            println(prettyJson)
         }
     }
 
@@ -79,8 +79,8 @@ fun main() {
 //        println(prettyJson)
 //    }
 
-    for (restaurant in RestaurantList.restaurants) {
-        println(restaurant)
-    }
+//    for (restaurant in RestaurantList.restaurants) {
+//        println(restaurant)
+//    }
 }
 
