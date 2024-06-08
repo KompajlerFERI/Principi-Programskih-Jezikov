@@ -138,7 +138,7 @@ fun Scraper(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolea
                             .padding(10.dp)
                             .padding(bottom = 30.dp)
                     ) {
-                        ShowRestaurants(state = state, restaurants = restaurants, refresh = refresh, showScrappedOnly = true)
+                        ShowRestaurants(state = state, restaurants = RestaurantList.restaurants, refresh = refresh, showScrappedOnly = true)
 
                         VerticalScrollbar(
                             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),

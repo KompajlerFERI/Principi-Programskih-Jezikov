@@ -11,7 +11,9 @@ class Restaurant(
     var menuList: MutableList<Menu> = mutableListOf(), //tu ko jih razcepi na Menu jih da v seznam
     var phoneNumber : String = "",
     var workingTimes: MutableList<String> = mutableListOf(), // vsi so čisto isto zapisani, eni majo sobota/nedelja: zaprto
-    var scrapped: Boolean = true
+    var scrapped: Boolean = true,
+    var id : String = "",
+    var isInDatabase : Boolean = false
 ) {
     override fun toString(): String {
         var menuString = ""

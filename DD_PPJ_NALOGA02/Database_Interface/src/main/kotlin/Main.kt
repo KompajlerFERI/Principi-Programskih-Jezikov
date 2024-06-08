@@ -13,9 +13,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import interface_components.*
 import io.github.serpro69.kfaker.Faker
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import scraper.Restaurant
+import scraper.RestaurantList
+import util.DatabaseJsonToClass
+import java.io.IOException
 
 @Composable
 @Preview
@@ -24,6 +31,14 @@ fun App() {
     var currentContent by remember { mutableStateOf(ContentSwitch.Scraper) }
     var restaurants = remember { mutableListOf<Restaurant>() }
     val isLoading = remember { mutableStateOf(false) }
+
+    for (restaurant in RestaurantList.restaurants) {
+        if (!restaurants.any { it.name == restaurant.name }) {
+            restaurants.add(restaurant)
+        } else {
+            println("Restaurant already exists in the list.")
+        }
+    }
 
     // Znotraj row-a je nav bar in content stran ob strani
     Row(
@@ -71,6 +86,46 @@ fun App() {
 }
 
 fun main() = application {
+    val client = OkHttpClient()
+
+    var request = Request.Builder()
+        .url("http://localhost:3001/restaurants")
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+        println("=================================RESTAURANTS=================================")
+        val responseBody = response.body!!.string()
+
+        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
+        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
+        val stringList = list.map { Gson().toJson(it) }
+
+        stringList.forEach {
+            DatabaseJsonToClass.JsonToRestaurantClass(it)
+        }
+    }
+
+    request = Request.Builder()
+        .url("http://localhost:3001/menus")
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+        println("=================================MENUS=================================")
+        val responseBody = response.body!!.string()
+
+        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
+        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
+        val stringList = list.map { Gson().toJson(it) }
+
+        stringList.forEach {
+            DatabaseJsonToClass.JsonToMenuItem(it)
+        }
+    }
+
     Window(onCloseRequest = ::exitApplication, title = "Studentska prehrana vmesnik") {
         App()
     }

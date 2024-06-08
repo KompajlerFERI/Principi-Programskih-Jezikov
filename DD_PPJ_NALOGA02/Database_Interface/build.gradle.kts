@@ -24,6 +24,7 @@ dependencies {
     implementation("it.skrape:skrapeit:0-SNAPSHOT") { isChanging = true }
     implementation("io.github.serpro69:kotlin-faker:$version")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.code.gson:gson:2.8.9")
 }
 
 compose.desktop {
