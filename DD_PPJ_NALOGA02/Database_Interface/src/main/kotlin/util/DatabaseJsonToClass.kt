@@ -104,4 +104,19 @@ object DatabaseJsonToClass {
             }
         }
     }
+
+    fun getRestaurantId(JsonString: String): String {
+        val jsonObject = JsonParser.parseString(JsonString).asJsonObject
+        val fieldNames = jsonObject.keySet()
+        var restaurantId = ""
+
+        fieldNames.forEach { fieldName ->
+            val fieldValue = jsonObject.get(fieldName)
+
+            if (fieldName == "_id") {
+                restaurantId = fieldValue.asString
+            }
+        }
+        return restaurantId
+    }
 }
