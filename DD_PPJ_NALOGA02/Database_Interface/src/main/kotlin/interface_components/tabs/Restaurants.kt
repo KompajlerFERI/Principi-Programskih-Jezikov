@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import interface_components.*
 import interface_components.elements.ShowRestaurants
 import scraper.Restaurant
+import scraper.RestaurantList
+import scraper.*
 
 @Composable
 fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolean>) {
@@ -51,7 +53,15 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
                             .padding(10.dp)
                             .padding(bottom = 30.dp)
                     ) {
-                        ShowRestaurants(state = state, restaurants = restaurants, refresh = refresh)
+                        for (restaurant in restaurants) {
+                            if (!RestaurantList.restaurants.any { it.name == restaurant.name }) {
+                                RestaurantList.restaurants.add(restaurant)
+                            } else {
+                                println("Restaurant already exists in the list.")
+                            }
+                        }
+
+                        ShowRestaurants(state = state, restaurants = RestaurantList.restaurants, refresh = refresh)
 
                         VerticalScrollbar(
                             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),

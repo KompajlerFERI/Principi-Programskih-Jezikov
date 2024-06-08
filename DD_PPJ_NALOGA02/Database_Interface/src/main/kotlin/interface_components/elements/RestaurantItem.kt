@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import interface_components.gradientColorDarker
@@ -81,6 +82,7 @@ fun RestaurantItem(
             // Row with restaurant name, address, pay price, phone number, dropdown, edit and delete buttons
             Row(
                 modifier = Modifier.fillMaxWidth()
+                    //.background(Color.LightGray)
             ) {
                 // Display restaurant fields
                 Column(
@@ -89,10 +91,11 @@ fun RestaurantItem(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = restaurant.name,
+                        text = restaurant.name ,
                         color = textColor,
                         style = TextStyle(
                             fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
 //                            shadow = Shadow(
 //                                color = Color.Black, offset = Offset(0f, 0f), blurRadius = 2f
 //                            )
@@ -166,7 +169,7 @@ fun RestaurantItem(
                 // Delete button
                 Column(
                     modifier = Modifier
-                        .weight(1.2f)
+                        .weight(1f)
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
@@ -175,6 +178,27 @@ fun RestaurantItem(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
                             tint = textColor
+                        )
+                    }
+                }
+
+                var checkColor : Color
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .padding(0.dp, 0.dp, 16.dp, 0.dp)
+                ) {
+                    IconButton(onClick = {}) {
+                        val checkColor = if (restaurant.isInDatabase) {
+                            textColor
+                        } else {
+                            Color.Gray
+                        }
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = checkColor
                         )
                     }
                 }

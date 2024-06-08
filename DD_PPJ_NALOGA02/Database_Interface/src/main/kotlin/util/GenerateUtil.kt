@@ -24,7 +24,8 @@ object GenerateUtil {
                 latitude = lat.toString(),
                 longitude = lon.toString(),
                 menuList = generateRandomMenus(menuPerRestaurant).toMutableList(),
-                scrapped = false
+                scrapped = false,
+                isInDatabase = false
             )
             randomRestaurants.add(restaurant)
         }
