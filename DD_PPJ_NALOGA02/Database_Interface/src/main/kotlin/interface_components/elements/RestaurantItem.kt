@@ -28,6 +28,7 @@ import interface_components.gradientColorLighter
 import interface_components.textColor
 import scraper.Restaurant
 import util.CalculateUtil
+import util.PushToDatabase
 import util.ValidityUtil
 
 @Composable
@@ -173,7 +174,7 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = { onDeleteClick() }) {
+                    IconButton(onClick = { onDeleteClick();  }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
@@ -182,14 +183,14 @@ fun RestaurantItem(
                     }
                 }
 
-                var checkColor : Color
+                // Is in database / inst in database
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {PushToDatabase.pushRestaurant(restaurant)}) {
                         val checkColor = if (restaurant.isInDatabase) {
                             textColor
                         } else {

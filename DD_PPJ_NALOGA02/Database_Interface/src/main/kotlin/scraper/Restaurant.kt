@@ -13,7 +13,9 @@ class Restaurant(
     var workingTimes: MutableList<String> = mutableListOf(), // vsi so čisto isto zapisani, eni majo sobota/nedelja: zaprto
     var scrapped: Boolean = true,
     var id : String = "",
-    var isInDatabase : Boolean = false
+    var isInDatabase : Boolean = false,
+    var edited : Boolean = false,
+    var ownerId : String = ""
 ) {
     override fun toString(): String {
         var menuString = ""

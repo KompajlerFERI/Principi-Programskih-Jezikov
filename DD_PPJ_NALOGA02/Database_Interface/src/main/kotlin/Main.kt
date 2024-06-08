@@ -86,45 +86,7 @@ fun App() {
 }
 
 fun main() = application {
-    val client = OkHttpClient()
 
-    var request = Request.Builder()
-        .url("http://localhost:3001/restaurants")
-        .build()
-
-    client.newCall(request).execute().use { response ->
-        if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-        println("=================================RESTAURANTS=================================")
-        val responseBody = response.body!!.string()
-
-        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
-        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
-        val stringList = list.map { Gson().toJson(it) }
-
-        stringList.forEach {
-            DatabaseJsonToClass.JsonToRestaurantClass(it)
-        }
-    }
-
-    request = Request.Builder()
-        .url("http://localhost:3001/menus")
-        .build()
-
-    client.newCall(request).execute().use { response ->
-        if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-        println("=================================MENUS=================================")
-        val responseBody = response.body!!.string()
-
-        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
-        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
-        val stringList = list.map { Gson().toJson(it) }
-
-        stringList.forEach {
-            DatabaseJsonToClass.JsonToMenuItem(it)
-        }
-    }
 
     Window(onCloseRequest = ::exitApplication, title = "Studentska prehrana vmesnik") {
         App()

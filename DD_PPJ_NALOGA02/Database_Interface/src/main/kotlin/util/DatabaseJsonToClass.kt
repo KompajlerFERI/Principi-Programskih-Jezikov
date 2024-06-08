@@ -18,6 +18,9 @@ object DatabaseJsonToClass {
             if (fieldName == "name") {
                 restaurant.name = fieldValue.asString
             }
+            if (fieldName == "owner") {
+                restaurant.ownerId = fieldValue.asString
+            }
             if (fieldName == "mealPrice") {
                 restaurant.fullPrice = fieldValue.asString
             }
@@ -57,7 +60,13 @@ object DatabaseJsonToClass {
         }
         restaurant.isInDatabase = true
         restaurant.scrapped = false
-        RestaurantList.add(restaurant)
+        restaurant.edited = false
+
+        if (!RestaurantList.restaurants.any { it.name == restaurant.name }) {
+            RestaurantList.add(restaurant)
+        } else {
+            println("Restaurant already exists in the list.")
+        }
     }
     fun JsonToMenuItem(JsonString: String) {
         val jsonObject = JsonParser.parseString(JsonString).asJsonObject
@@ -88,7 +97,7 @@ object DatabaseJsonToClass {
             if (fieldName == "restaurant") {
                 val restaurantId = fieldValue.asString
                 RestaurantList.restaurants.forEach { restaurant ->
-                    if (restaurant.id == restaurantId) {
+                    if (restaurant.id == restaurantId && !restaurant.menuList.any { it.dish == menuItem.dish }) {
                         restaurant.menuList.add(menuItem)
                     }
                 }
