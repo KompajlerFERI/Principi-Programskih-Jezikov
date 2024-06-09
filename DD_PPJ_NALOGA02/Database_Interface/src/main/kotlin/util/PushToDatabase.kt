@@ -87,110 +87,208 @@ fun getIdFromTagName(tagName: String): String {
 object PushToDatabase {
 
     fun pushRestaurant(restaurant: Restaurant) {
-        if (restaurant.isInDatabase) {
-            println("Restaurant already exists in the database.")
-            return
-        }
-        Auth.login("Sluzek", "1234")
+        if (restaurant.isInDatabase && restaurant.edited) {
+            Auth.login("Sluzek", "1234")
 
-        val restaurantDb = RestaurantDb(
-            name = restaurant.name,
-            address = restaurant.address,
-            mealPrice = restaurant.fullPrice.replace(",", "."),
-            mealSurcharge = restaurant.payPrice.replace(",", "."),
-            workingHours = restaurant.workingTimes.map {
-                val split = it.split(" : ")
-                if (split[1] == "Zaprto") {
-                    WorkingHour(split[0], "Zaprto", "Zaprto")
-                } else {
-                    val times = split[1].split(" - ")
-                    WorkingHour(split[0], times[0], times[1])
-                }
-            },
-            ownerId = "6654c15b6afe60954c9946fd",
-            location = Location(
-                type = "Point",
-                coordinates = listOf(restaurant.longitude, restaurant.latitude)
+            val restaurantDb = RestaurantDb(
+                name = restaurant.name,
+                address = restaurant.address,
+                mealPrice = restaurant.fullPrice.replace(",", "."),
+                mealSurcharge = restaurant.payPrice.replace(",", "."),
+                workingHours = restaurant.workingTimes.map {
+                    val split = it.split(" : ")
+                    if (split[1] == "Zaprto") {
+                        WorkingHour(split[0], "Zaprto", "Zaprto")
+                    } else {
+                        val times = split[1].split(" - ")
+                        WorkingHour(split[0], times[0], times[1])
+                    }
+                },
+                ownerId = "6654c15b6afe60954c9946fd",
+                location = Location(
+                    type = "Point",
+                    coordinates = listOf(restaurant.longitude, restaurant.latitude)
+                )
             )
-        )
 
-        //println(restaurantDb)
-        val JSON = "application/json".toMediaType()
-        val gson = GsonBuilder().create()
-        val json = gson.toJson(restaurantDb)
+            val JSON = "application/json".toMediaType()
+            val gson = GsonBuilder().create()
+            val json = gson.toJson(restaurantDb)
 
-        val body = json.toRequestBody(JSON)
+            val body = json.toRequestBody(JSON)
 
-        val request = Request.Builder()
-            .url("http://localhost:3001/restaurants")
-            .post(body)
-            //.addHeader("Authorization", "Bearer ${Auth.token}")
-            .addHeader("Cookie", Auth.cookie)
-            .build()
+            val request = Request.Builder()
+                .url("http://localhost:3001/restaurants/${restaurant.id}")
+                .put(body)
+                .addHeader("Cookie", Auth.cookie)
+                .build()
 
-        val client = OkHttpClient()
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw Exception("Unexpected code $response")
-            val responseBody = response.body!!.string()
-            println("Response body: " + responseBody)
-            restaurant.isInDatabase = true
+            val client = OkHttpClient()
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw Exception("Unexpected code $response")
+                val responseBody = response.body!!.string()
+                println("Response body: " + responseBody)
+                restaurant.isInDatabase = true
+                restaurant.edited = false
 
-            restaurant.id = DatabaseJsonToClass.getRestaurantId(responseBody)
-            println("RESTAURANT ID: ${restaurant.id}")
-        }
+                restaurant.id = DatabaseJsonToClass.getRestaurantId(responseBody)
+                println("RESTAURANT ID: ${restaurant.id}")
+            }
+        } else {
 
-        for (menu in restaurant.menuList) {
-            pushMenuToDatabase(menu, restaurant.id)
+            if (restaurant.isInDatabase) {
+                println("Restaurant already exists in the database.")
+                return
+            }
+            Auth.login("Sluzek", "1234")
+
+            val restaurantDb = RestaurantDb(
+                name = restaurant.name,
+                address = restaurant.address,
+                mealPrice = restaurant.fullPrice.replace(",", "."),
+                mealSurcharge = restaurant.payPrice.replace(",", "."),
+                workingHours = restaurant.workingTimes.map {
+                    val split = it.split(" : ")
+                    if (split[1] == "Zaprto") {
+                        WorkingHour(split[0], "Zaprto", "Zaprto")
+                    } else {
+                        val times = split[1].split(" - ")
+                        WorkingHour(split[0], times[0], times[1])
+                    }
+                },
+                ownerId = "6654c15b6afe60954c9946fd",
+                location = Location(
+                    type = "Point",
+                    coordinates = listOf(restaurant.longitude, restaurant.latitude)
+                )
+            )
+
+            //println(restaurantDb)
+            val JSON = "application/json".toMediaType()
+            val gson = GsonBuilder().create()
+            val json = gson.toJson(restaurantDb)
+
+            val body = json.toRequestBody(JSON)
+
+            val request = Request.Builder()
+                .url("http://localhost:3001/restaurants")
+                .post(body)
+                //.addHeader("Authorization", "Bearer ${Auth.token}")
+                .addHeader("Cookie", Auth.cookie)
+                .build()
+
+            val client = OkHttpClient()
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw Exception("Unexpected code $response")
+                val responseBody = response.body!!.string()
+                println("Response body: " + responseBody)
+                restaurant.isInDatabase = true
+
+                restaurant.id = DatabaseJsonToClass.getRestaurantId(responseBody)
+                println("RESTAURANT ID: ${restaurant.id}")
+            }
+
+            for (menu in restaurant.menuList) {
+                pushMenuToDatabase(menu, restaurant.id)
+            }
         }
     }
 
     fun pushMenuToDatabase(menu: Menu, restaurantId: String) {
-        if (menu.isInDatabase) {
-            println("Restaurant already exists in the database.")
-            return
-        }
-        Auth.login("Sluzek", "1234")
+        if (menu.isInDatabase && menu.edited) {
+            Auth.login("Sluzek", "1234")
 
-        var category = menu.category.lowercase(Locale.getDefault()).replace(" ", "-")
-        if (category == "") {
-            category = "none"
-        }
-        if (category == "riba") {
-            category = "morski-sadeži"
-        }
+            var category = menu.category.lowercase(Locale.getDefault()).replace(" ", "-")
+            if (category == "") {
+                category = "none"
+            }
+            if (category == "riba") {
+                category = "morski-sadeži"
+            }
 
-        var tagId = getIdFromTagName(category)
+            var tagId = getIdFromTagName(category)
 
-        val menuDb = MenuDb(
-            dish = menu.dish.replace("\n", ""),
-            sideDishes = menu.extras,
-            restaurantId = restaurantId,
-            tag = tagId
-        )
+            val menuDb = MenuDb(
+                dish = menu.dish.replace("\n", ""),
+                sideDishes = menu.extras,
+                restaurantId = restaurantId,
+                tag = tagId
+            )
 
-        val JSON = "application/json".toMediaType()
-        val gson = GsonBuilder().create()
-        val json = gson.toJson(menuDb)
+            val JSON = "application/json".toMediaType()
+            val gson = GsonBuilder().create()
+            val json = gson.toJson(menuDb)
 
-        val body = json.toRequestBody(JSON)
+            val body = json.toRequestBody(JSON)
 
-        val request = Request.Builder()
-            .url("http://localhost:3001/menus")
-            .post(body)
-            //.addHeader("Authorization", "Bearer ${Auth.token}")
-            .addHeader("Cookie", Auth.cookie)
-            .build()
+            val request = Request.Builder()
+                .url("http://localhost:3001/menus/${menu.id}")
+                .put(body)
+                .addHeader("Cookie", Auth.cookie)
+                .build()
 
-        val client = OkHttpClient()
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw Exception("Unexpected code $response")
-            val responseBody = response.body!!.string()
-            println("Response body: " + responseBody)
-            menu.isInDatabase = true
-            menu.restaurantId = restaurantId
+            val client = OkHttpClient()
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw Exception("Unexpected code $response")
+                val responseBody = response.body!!.string()
+                println("Response body: " + responseBody)
+                menu.isInDatabase = true
+                menu.restaurantId = restaurantId
 
-            menu.id = DatabaseJsonToClass.getRestaurantId(responseBody)
-            println("RESTAURANT ID: ${menu.id}")
+                menu.id = DatabaseJsonToClass.getRestaurantId(responseBody)
+                menu.edited = false
+                println("RESTAURANT ID: ${menu.id}")
+            }
+
+        } else {
+
+            if (menu.isInDatabase) {
+                println("Restaurant already exists in the database.")
+                return
+            }
+            Auth.login("Sluzek", "1234")
+
+            var category = menu.category.lowercase(Locale.getDefault()).replace(" ", "-")
+            if (category == "") {
+                category = "none"
+            }
+            if (category == "riba") {
+                category = "morski-sadeži"
+            }
+
+            var tagId = getIdFromTagName(category)
+
+            val menuDb = MenuDb(
+                dish = menu.dish.replace("\n", ""),
+                sideDishes = menu.extras,
+                restaurantId = restaurantId,
+                tag = tagId
+            )
+
+            val JSON = "application/json".toMediaType()
+            val gson = GsonBuilder().create()
+            val json = gson.toJson(menuDb)
+
+            val body = json.toRequestBody(JSON)
+
+            val request = Request.Builder()
+                .url("http://localhost:3001/menus")
+                .post(body)
+                //.addHeader("Authorization", "Bearer ${Auth.token}")
+                .addHeader("Cookie", Auth.cookie)
+                .build()
+
+            val client = OkHttpClient()
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw Exception("Unexpected code $response")
+                val responseBody = response.body!!.string()
+                println("Response body: " + responseBody)
+                menu.isInDatabase = true
+                menu.restaurantId = restaurantId
+
+                menu.id = DatabaseJsonToClass.getRestaurantId(responseBody)
+                println("RESTAURANT ID: ${menu.id}")
+            }
         }
     }
 }

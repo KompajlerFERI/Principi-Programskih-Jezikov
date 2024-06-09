@@ -93,7 +93,7 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
     client.newCall(request).execute().use { response ->
         if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-        println("=================================TAGS=================================")
+        println("=================================USERS=================================")
         val responseBody = response.body!!.string()
 
         val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
@@ -105,7 +105,7 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
         }
 
         for (user in UserList.users) {
-            println(user)
+            println(user.username)
         }
     }
 
