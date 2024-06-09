@@ -50,10 +50,9 @@ fun Scraper(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolea
             Button(
                 enabled = enabled.value,
                 onClick = {
-                    restaurants.removeIf({ it.scrapped })
-                    RestaurantList.restaurants.removeIf({ it.scrapped })
+                    restaurants.removeIf({ it.scrapped && !it.isInDatabase })
+                    RestaurantList.restaurants.removeIf({ it.scrapped && !it.isInDatabase })
 
-                    // TODO: Delete all the previously scrapped restaurants in the database
 
                     coroutineScope.launch {
                         isLoading.value = true
@@ -66,9 +65,15 @@ fun Scraper(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolea
                             RestaurantList.restaurants
                         }
 
-                        // TODO: Add the newly scraped restaurants to the database
 
                         restaurants.addAll(scrapedRestaurants)
+
+                        restaurants.removeIf { restaurant ->
+                            restaurants.count { it.name == restaurant.name && it.isInDatabase } > 0 && !restaurant.isInDatabase
+                        }
+                        RestaurantList.restaurants.removeIf { restaurant ->
+                            RestaurantList.restaurants.count { it.name == restaurant.name && it.isInDatabase } > 0 && !restaurant.isInDatabase
+                        }
 
                         isLoading.value = false
                     }
