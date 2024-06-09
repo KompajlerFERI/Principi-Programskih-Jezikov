@@ -16,7 +16,7 @@ class Restaurant(
     var isInDatabase : Boolean = false,
     var edited : Boolean = false,
     var ownerId : String = "",
-    var deleted: Boolean = false
+    var deleted: Boolean = false,
 ) {
     override fun toString(): String {
         var menuString = ""

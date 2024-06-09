@@ -60,10 +60,13 @@ object DatabaseJsonToClass {
         restaurant.scrapped = false
         restaurant.edited = false
 
-        if (!RestaurantList.restaurants.any { it.name == restaurant.name }) {
+        val existingRestaurant = RestaurantList.restaurants.find { it.id == restaurant.id }
+
+        if (existingRestaurant == null) {
+            // If the restaurant does not exist in the list, add it
             RestaurantList.add(restaurant)
         } else {
-            println("Restaurant already exists in the list.")
+            println("Restaurant exists already!")
         }
     }
 
@@ -84,7 +87,16 @@ object DatabaseJsonToClass {
 
         }
         tag.isInDatabase = true
-        if (!TagList.tags.any { it.name == tag.name }) {
+//        if (!TagList.tags.any { it.name == tag.name }) {
+//            TagList.add(tag)
+//        } else {
+//            println("Tag already exists in the list.")
+//        }
+
+        val existingTag = TagList.tags.find { it.id == tag.id }
+
+        if (existingTag == null) {
+            // If the restaurant does not exist in the list, add it
             TagList.add(tag)
         } else {
             println("Tag already exists in the list.")
@@ -116,12 +128,22 @@ object DatabaseJsonToClass {
                 val tagName = tagObject.get("name").asString
                 menuItem.category = tagName
             }
+            if (fieldName == "_id") {
+                menuItem.id = fieldValue.asString
+            }
             if (fieldName == "restaurant") {
                 val restaurantId = fieldValue.asString
+
                 RestaurantList.restaurants.forEach { restaurant ->
+                    val existingMenu = restaurant.menuList.find{ it.id == menuItem.id }
                     if (restaurant.id == restaurantId && !restaurant.menuList.any { it.dish == menuItem.dish }) {
-                        menuItem.isInDatabase = true
-                        restaurant.menuList.add(menuItem)
+                        if (existingMenu == null) {
+                            menuItem.isInDatabase = true
+                            restaurant.menuList.add(menuItem)
+                        }
+                        else {
+                            println("Menu item already exists in the restaurant.")
+                        }
                     }
                 }
             }

@@ -6,17 +6,20 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import interface_components.textColor
 import scraper.Menu
+import util.PushToDatabase
 
 @Composable
 fun MenuItem(
@@ -80,6 +83,34 @@ fun MenuItem(
                     )
                 }
             }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+                    .padding(0.dp, 0.dp, 16.dp, 0.dp)
+            ) {
+                IconButton(onClick = { PushToDatabase.pushMenuToDatabase(menu, menu.restaurantId)}) {
+                    val checkColor = if (menu.isInDatabase && menu.edited) {
+                        val hexColor = "F29DAB"
+                        val red = hexColor.substring(0, 2).toInt(16)
+                        val green = hexColor.substring(2, 4).toInt(16)
+                        val blue = hexColor.substring(4, 6).toInt(16)
+                        Color(red, green, blue)
+                    }
+                    else if (menu.isInDatabase) {
+                        textColor
+                    }
+                    else {
+                        Color.Gray
+                    }
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        tint = checkColor
+                    )
+                }
+            }
         }
     } else {
         Row(
@@ -135,7 +166,11 @@ fun MenuItem(
                     val editedMenu = Menu(
                         dish = editedMenuDish,
                         extras = editedMenuExtras.split(", ").toMutableList(),
-                        category = editedMenuCategory
+                        category = editedMenuCategory,
+                        restaurantId = menu.restaurantId,
+                        id = menu.id,
+                        isInDatabase = menu.isInDatabase,
+                        edited = true
                     )
 
                     onEditClick(editedMenu)

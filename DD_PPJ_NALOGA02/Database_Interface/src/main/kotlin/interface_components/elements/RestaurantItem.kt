@@ -185,7 +185,7 @@ fun RestaurantItem(
                     }
                 }
 
-                // Is in database / isnt in database
+                // Is in database = red, not = rey, is in but edited = orane
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -193,9 +193,17 @@ fun RestaurantItem(
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
                     IconButton(onClick = {PushToDatabase.pushRestaurant(restaurant)}) {
-                        val checkColor = if (restaurant.isInDatabase) {
+                        val checkColor = if (restaurant.isInDatabase && restaurant.edited) {
+                            val hexColor = "F29DAB"
+                            val red = hexColor.substring(0, 2).toInt(16)
+                            val green = hexColor.substring(2, 4).toInt(16)
+                            val blue = hexColor.substring(4, 6).toInt(16)
+                            Color(red, green, blue)
+                        }
+                        else if (restaurant.isInDatabase) {
                             textColor
-                        } else {
+                        }
+                        else {
                             Color.Gray
                         }
                         Icon(
@@ -269,14 +277,15 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                 ) {
                     IconButton(onClick = {
+                        println("EDITED")
                         if(
                             editedName.length > 0 &&
                             editedPayPrice.toFloatOrNull() != null &&
                             editedAddress.length > 0 &&
-                            editedPhoneNumber.length > 0 &&
-                            ValidityUtil.isValidPhoneNumber(editedPhoneNumber) &&
-                            editedWorkingTimes.length > 0 &&
-                            ValidityUtil.isValidWorkingHours(editedWorkingTimes)
+                            //editedPhoneNumber.length > 0 &&
+                            //ValidityUtil.isValidPhoneNumber(editedPhoneNumber) &&
+                            editedWorkingTimes.length > 0
+                            //ValidityUtil.isValidWorkingHours(editedWorkingTimes)
                         ) {
                             // Create a new restaurant object with edited fields
                             val editedRestaurant = Restaurant(
@@ -289,12 +298,17 @@ fun RestaurantItem(
                                 phoneNumber = editedPhoneNumber,
                                 workingTimes = editedWorkingTimes.split("\n").toMutableList(),
                                 menuList = menus.value.toMutableList(),
-                                scrapped = restaurant.scrapped
+                                scrapped = restaurant.scrapped,
+                                id = restaurant.id,
+                                edited = true,
+                                ownerId = restaurant.ownerId,
+                                isInDatabase = restaurant.isInDatabase,
                             )
-
+                            println("TEST")
                             onEditClick(editedRestaurant) // Call the edit callback with the edited restaurant
                             expanded = false // Collapse the item after editing
                             editRestaurant.value = false
+                            restaurant.edited = true
                         }
                     }) {
                         Icon(
@@ -350,6 +364,7 @@ fun RestaurantItem(
                         MenuItem(
                             menu = menu,
                             onEditClick = { editedMenu ->
+                                println("EDITEDDDDDD")
                                 val index = menus.value.indexOf(menu)
                                 if (index != -1) {
                                     val updatedMenus = menus.value.toMutableList()
