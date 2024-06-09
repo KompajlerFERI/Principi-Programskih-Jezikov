@@ -73,6 +73,10 @@ fun App() {
             onClickAbout = {
                 currentContent = ContentSwitch.About
                 clickedNavButton.value = !clickedNavButton.value
+            },
+            onClickUsers = {
+                currentContent = ContentSwitch.Users
+                clickedNavButton.value = !clickedNavButton.value
             }
         )
         Spacer(modifier = Modifier.fillMaxHeight().width(15.dp))

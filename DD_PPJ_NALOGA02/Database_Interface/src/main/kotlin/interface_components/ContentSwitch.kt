@@ -6,5 +6,6 @@ enum class ContentSwitch {
     Scraper,
     Generate,
     About,
+    Users,
     ErrorContent
 }

@@ -25,8 +25,9 @@ fun NavBar(
     onClickRestaurants: () -> Unit,
     onClickScraper: () -> Unit,
     onClickGenerate: () -> Unit,
-    onClickAbout: () -> Unit
-           ) {
+    onClickAbout: () -> Unit,
+    onClickUsers: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -153,6 +154,34 @@ fun NavBar(
                 )
                 Spacer(modifier = Modifier.width(3.dp))
                 Text(text = "Generate", color = textColor)
+                Spacer(modifier = Modifier.width(6.dp))
+            }
+            Spacer(modifier = Modifier.weight(0.1f))
+        }
+        Spacer(modifier = Modifier.height(25.dp))
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Spacer(modifier = Modifier.weight(0.1f))
+            Row(
+                modifier = Modifier
+                    .padding(start = 3.dp, end = 3.dp)
+                    .fillMaxWidth(0.9f)
+                    .height(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { onClickGenerate() },
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "Show all users",
+                    modifier = Modifier.size(20.dp),
+                    tint = textColor
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(text = "Users", color = textColor)
                 Spacer(modifier = Modifier.width(6.dp))
             }
             Spacer(modifier = Modifier.weight(0.1f))

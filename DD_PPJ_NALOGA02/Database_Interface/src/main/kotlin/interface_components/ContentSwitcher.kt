@@ -45,6 +45,7 @@ fun ContentSwitcher(
                 ContentSwitch.Scraper -> Scraper(restaurants, isLoading)
                 ContentSwitch.Generate -> Generate(restaurants)
                 ContentSwitch.About -> About()
+                ContentSwitch.Users -> Users(restaurants, isLoading)
                 ContentSwitch.ErrorContent -> ErrorContent()
             }
         }
