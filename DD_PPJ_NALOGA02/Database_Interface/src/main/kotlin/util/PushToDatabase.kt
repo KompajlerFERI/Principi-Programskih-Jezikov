@@ -2,6 +2,7 @@ package util
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import okhttp3.FormBody
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -106,8 +107,12 @@ object PushToDatabase {
         val client = OkHttpClient()
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw Exception("Unexpected code $response")
-            println("Response body: " + response.body!!.string())
+            val responseBody = response.body!!.string()
+            println("Response body: " + responseBody)
             restaurant.isInDatabase = true
+
+            restaurant.id = DatabaseJsonToClass.getRestaurantId(responseBody)
+            println("RESTAURANT ID: ${restaurant.id}")
         }
     }
 }

@@ -29,6 +29,7 @@ import interface_components.textColor
 import scraper.Restaurant
 import util.CalculateUtil
 import util.PushToDatabase
+import util.RemoveFromDatabase
 import util.ValidityUtil
 
 @Composable
@@ -174,7 +175,7 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = { onDeleteClick();  }) {
+                    IconButton(onClick = { onDeleteClick(); RemoveFromDatabase.removeRestaurant(restaurant) }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
