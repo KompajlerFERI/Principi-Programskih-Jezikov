@@ -193,8 +193,6 @@ fun Generate(restaurants: MutableList<Restaurant>) {
                             )
                             for (newRestaurant in newRestaurants) {
 
-                                // TODO: Add the new restaurants to the database
-
                                 restaurants.add(newRestaurant)
                             }
                         },

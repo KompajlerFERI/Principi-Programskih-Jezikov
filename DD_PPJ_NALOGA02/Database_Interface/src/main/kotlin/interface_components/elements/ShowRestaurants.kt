@@ -36,6 +36,7 @@ fun ShowRestaurants(
             items(displayedRestaurants)  { restaurant ->
                 RestaurantItem(
                     refresh = refresh,
+                    restaurantsTemp = restaurants,
                     restaurant = restaurant,
                     onEditClick = { editedRestaurant ->
                         // Find and update the edited restaurant

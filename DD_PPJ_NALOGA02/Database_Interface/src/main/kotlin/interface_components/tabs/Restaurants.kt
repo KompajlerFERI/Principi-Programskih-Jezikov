@@ -63,6 +63,29 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
         }
     }
 
+    request = Request.Builder()
+        .url("http://localhost:3001/tags")
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+        println("=================================TAGS=================================")
+        val responseBody = response.body!!.string()
+
+        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
+        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
+        val stringList = list.map { Gson().toJson(it) }
+
+        stringList.forEach {
+            DatabaseJsonToClass.JsonTagToClass(it)
+        }
+
+        for (tag in TagList.tags) {
+            println("TAG: ${tag.name}")
+        }
+    }
+
 
 
 
@@ -102,13 +125,22 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
                             .padding(10.dp)
                             .padding(bottom = 30.dp)
                     ) {
+                        val restaurantsToRemove = mutableListOf<Restaurant>()
+
                         for (restaurant in restaurants) {
                             if (!RestaurantList.restaurants.any { it.name == restaurant.name }) {
-                                RestaurantList.restaurants.add(restaurant)
+                                if (restaurant.deleted) {
+                                    restaurantsToRemove.add(restaurant)
+                                    println("Restaurant was supposed to be gone")
+                                } else {
+                                    RestaurantList.restaurants.add(restaurant)
+                                }
                             } else {
                                 println("Restaurant already exists in the list.")
                             }
                         }
+                        restaurants.removeAll(restaurantsToRemove)
+                        restaurantsToRemove.clear()
 
                         ShowRestaurants(state = state, restaurants = RestaurantList.restaurants, refresh = refresh)
 
