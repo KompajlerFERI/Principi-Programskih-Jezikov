@@ -81,7 +81,12 @@ object PushToDatabase {
             mealSurcharge = restaurant.payPrice.replace(",", "."),
             workingHours = restaurant.workingTimes.map {
                 val split = it.split(" : ")
-                WorkingHour(split[0], split[1].split(" - ")[0], split[1].split(" - ")[1])
+                if (split[1] == "Zaprto") {
+                    WorkingHour(split[0], "Zaprto", "Zaprto")
+                } else {
+                    val times = split[1].split(" - ")
+                    WorkingHour(split[0], times[0], times[1])
+                }
             },
             ownerId = "6654c15b6afe60954c9946fd",
             location = Location(

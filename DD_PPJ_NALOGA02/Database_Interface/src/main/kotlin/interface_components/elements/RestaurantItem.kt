@@ -184,7 +184,7 @@ fun RestaurantItem(
                     }
                 }
 
-                // Is in database / inst in database
+                // Is in database / isnt in database
                 Column(
                     modifier = Modifier
                         .weight(1f)
