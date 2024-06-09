@@ -65,11 +65,12 @@ object GenerateUtil {
 
     fun generateRandomMenus(count: Int): List<Menu> {
         val randomMenus = mutableListOf<Menu>()
+        val predefinedExtras = arrayOf("pizza", "meso", "solata", "mešano", "morski-sadeži", "hitra-hrana", "vegetarijansko", "juha", "celiakiji-prijazni-obroki")
         repeat(count) {
             val menu = Menu(
                 dish = faker.food.dish(),
                 extras = mutableListOf(faker.food.fruits()),
-                category = faker.food.spices()
+                category = predefinedExtras.random()
             )
             randomMenus.add(menu)
         }

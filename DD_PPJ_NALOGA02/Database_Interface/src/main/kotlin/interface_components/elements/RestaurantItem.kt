@@ -36,6 +36,7 @@ import util.ValidityUtil
 @Preview
 fun RestaurantItem(
     refresh: MutableState<Boolean>,
+    restaurantsTemp: MutableList<Restaurant>,
     restaurant: Restaurant,
     onEditClick: (Restaurant) -> Unit,
     onDeleteClick: () -> Unit
@@ -175,7 +176,7 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = { onDeleteClick(); RemoveFromDatabase.removeRestaurant(restaurant) }) {
+                    IconButton(onClick = { onDeleteClick(); RemoveFromDatabase.removeRestaurant(restaurant); restaurantsTemp.remove(restaurant); }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,

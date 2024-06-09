@@ -1,9 +1,7 @@
 package util
 
 import com.google.gson.JsonParser
-import scraper.Menu
-import scraper.Restaurant
-import scraper.RestaurantList
+import scraper.*
 
 object DatabaseJsonToClass {
     fun JsonToRestaurantClass(JsonString: String) {
@@ -68,6 +66,30 @@ object DatabaseJsonToClass {
             println("Restaurant already exists in the list.")
         }
     }
+
+    fun JsonTagToClass(JsonString: String) {
+        val jsonObject = JsonParser.parseString(JsonString).asJsonObject
+        val fieldNames = jsonObject.keySet()
+
+        var tag = Tag()
+        fieldNames.forEach { fieldName ->
+            val fieldValue = jsonObject.get(fieldName)
+
+            if (fieldName == "name") {
+                tag.name = fieldValue.asString
+            }
+            if (fieldName == "_id") {
+                tag.id = fieldValue.asString
+            }
+
+        }
+        tag.isInDatabase = true
+        if (!TagList.tags.any { it.name == tag.name }) {
+            TagList.add(tag)
+        } else {
+            println("Tag already exists in the list.")
+        }
+    }
     fun JsonToMenuItem(JsonString: String) {
         val jsonObject = JsonParser.parseString(JsonString).asJsonObject
         val fieldNames = jsonObject.keySet()
@@ -98,6 +120,7 @@ object DatabaseJsonToClass {
                 val restaurantId = fieldValue.asString
                 RestaurantList.restaurants.forEach { restaurant ->
                     if (restaurant.id == restaurantId && !restaurant.menuList.any { it.dish == menuItem.dish }) {
+                        menuItem.isInDatabase = true
                         restaurant.menuList.add(menuItem)
                     }
                 }
