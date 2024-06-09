@@ -142,4 +142,44 @@ object DatabaseJsonToClass {
         }
         return restaurantId
     }
+
+    fun JsonToUser(JsonString: String) {
+        val jsonObject = JsonParser.parseString(JsonString).asJsonObject
+        val fieldNames = jsonObject.keySet()
+
+        var user = User()
+
+        fieldNames.forEach { fieldName ->
+            val fieldValue = jsonObject.get(fieldName)
+
+            if (fieldName == "username") {
+                val username = fieldValue.asString
+                user.username = username
+            }
+            if (fieldName == "firstName") {
+                val firstName = fieldValue.asString
+                user.firstName = firstName
+            }
+            if (fieldName == "lastName") {
+                val lastName = fieldValue.asString
+                user.lastName = lastName
+            }
+            if (fieldName == "email") {
+                val email = fieldValue.asString
+                user.email = email
+            }
+            if (fieldName == "userType") {
+                val userType = fieldValue.asString
+                user.userType = userType
+            }
+            if (fieldName == "_id") {
+                val id = fieldValue.asString
+                user.id = id
+            }
+        }
+
+        if (user.userType != "admin") {
+            UserList.addUser(user)
+        }
+    }
 }

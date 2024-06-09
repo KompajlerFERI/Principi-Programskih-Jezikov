@@ -86,6 +86,29 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
         }
     }
 
+    request = Request.Builder()
+        .url("http://localhost:3001/users")
+        .build()
+
+    client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+        println("=================================TAGS=================================")
+        val responseBody = response.body!!.string()
+
+        val listType = object : TypeToken<List<Map<String, Any>>>() {}.type
+        val list: List<Map<String, Any>> = Gson().fromJson(responseBody, listType)
+        val stringList = list.map { Gson().toJson(it) }
+
+        stringList.forEach {
+            DatabaseJsonToClass.JsonToUser(it)
+        }
+
+        for (user in UserList.users) {
+            println(user)
+        }
+    }
+
 
 
 
