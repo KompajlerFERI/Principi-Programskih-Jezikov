@@ -44,15 +44,11 @@ fun ShowRestaurants(
                         if (index != -1) {
                             restaurants[index] = editedRestaurant
 
-                            // TODO: Edit the restaurant in the database
-
                             refresh.value = !refresh.value
                         }
                     },
                     onDeleteClick = {
                         restaurants.remove(restaurant)
-
-                        // TODO: Delete the restaurant in the database
 
                         refresh.value = !refresh.value
                     }
