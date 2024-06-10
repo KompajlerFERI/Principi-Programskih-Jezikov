@@ -22,7 +22,7 @@ import java.io.IOException
 
 @Composable
 fun Users() {
-    val isLoading = remember { mutableStateOf(true) }
+    val isLoading = remember { mutableStateOf(false) }
     val users = remember { mutableStateListOf<User>() }
     val client = OkHttpClient()
 

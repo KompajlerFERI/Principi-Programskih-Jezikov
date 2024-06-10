@@ -94,13 +94,6 @@ fun User(
                     )
                 )
                 Text(
-                    text = user.lastName,
-                    color = textColor,
-                    style = TextStyle(
-                        fontSize = 14.sp
-                    )
-                )
-                Text(
                     text = user.email,
                     color = textColor,
                     style = TextStyle(
@@ -114,6 +107,23 @@ fun User(
                         fontSize = 12.sp
                     )
                 )
+                Spacer(modifier = Modifier.width(1f.dp))
+
+                // Delete button
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(0.dp, 0.dp, 16.dp, 0.dp)
+                ) {
+                    IconButton(onClick = { onDeleteClick(); }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null,
+                            tint = textColor
+                        )
+                    }
+                }
             }
         }
     }
