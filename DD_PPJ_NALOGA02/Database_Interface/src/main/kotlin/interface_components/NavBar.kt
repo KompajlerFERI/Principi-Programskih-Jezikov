@@ -170,7 +170,7 @@ fun NavBar(
                     .fillMaxWidth(0.9f)
                     .height(40.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable { onClickGenerate() },
+                    .clickable { onClickUsers() },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
