@@ -72,7 +72,7 @@ fun User(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = user.username ,
+                    text = user.username,
                     color = textColor,
                     style = TextStyle(
                         fontSize = 18.sp,
@@ -107,22 +107,20 @@ fun User(
                         fontSize = 12.sp
                     )
                 )
-                Spacer(modifier = Modifier.width(1f.dp))
-
-                // Delete button
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(0.dp, 0.dp, 16.dp, 0.dp)
-                ) {
-                    IconButton(onClick = { onDeleteClick(); }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = null,
-                            tint = textColor
-                        )
-                    }
+            }
+            // Delete button
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+                    .padding(0.dp, 0.dp, 16.dp, 0.dp)
+            ) {
+                IconButton(onClick = { onDeleteClick(); }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null,
+                        tint = textColor
+                    )
                 }
             }
         }
