@@ -108,7 +108,7 @@ fun Scraper(restaurants: MutableList<Restaurant>, isLoading: MutableState<Boolea
                     ) {
                         Text(
                             "Scrape",
-                            color = textColorDark
+                            color = Color.White
                         )
                     }
                 }

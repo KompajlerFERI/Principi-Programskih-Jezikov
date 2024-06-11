@@ -205,6 +205,9 @@ object PushToDatabase {
             if (category == "riba") {
                 category = "morski-sadeži"
             }
+            if (TagList.tags.none { it.name == category }) {
+                category = "none"
+            }
 
             var tagId = getIdFromTagName(category)
 
@@ -254,6 +257,9 @@ object PushToDatabase {
             }
             if (category == "riba") {
                 category = "morski-sadeži"
+            }
+            if (TagList.tags.none { it.name == category }) {
+                category = "none"
             }
 
             var tagId = getIdFromTagName(category)
