@@ -112,6 +112,16 @@ object PushToDatabase {
             val tagListIds: MutableList<String> = mutableListOf()
 
             for (tag in tagList) {
+                var category = tag.lowercase(Locale.getDefault()).replace(" ", "-")
+                if (category == "") {
+                    category = "none"
+                }
+                if (category == "riba") {
+                    category = "morski-sadeži"
+                }
+                if (TagList.tags.none { it.name == category }) {
+                    category = "none"
+                }
                 tagListIds.add(getIdFromTagName(tag))
             }
 
@@ -172,7 +182,17 @@ object PushToDatabase {
             val tagListIds: MutableList<String> = mutableListOf()
 
             for (tag in tagList) {
-                tagListIds.add(getIdFromTagName(tag))
+                var category = tag.lowercase(Locale.getDefault()).replace(" ", "-")
+                if (category == "") {
+                    category = "none"
+                }
+                if (category == "riba") {
+                    category = "morski-sadeži"
+                }
+                if (TagList.tags.none { it.name == category }) {
+                    category = "none"
+                }
+                tagListIds.add(getIdFromTagName(category))
             }
 
             val restaurantDb = RestaurantDb(

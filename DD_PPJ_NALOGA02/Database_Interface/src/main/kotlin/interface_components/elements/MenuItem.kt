@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import interface_components.textColor
 import scraper.Menu
+import scraper.RestaurantList
 import util.PushToDatabase
 
 @Composable
@@ -90,7 +91,14 @@ fun MenuItem(
                     .align(Alignment.CenterVertically)
                     .padding(0.dp, 0.dp, 16.dp, 0.dp)
             ) {
-                IconButton(onClick = { PushToDatabase.pushMenuToDatabase(menu, menu.restaurantId)}) {
+                IconButton(
+                    onClick = {
+                        if (RestaurantList.restaurants.any { it.id == menu.restaurantId && it.isInDatabase }) {
+                            PushToDatabase.pushMenuToDatabase(menu, menu.restaurantId)
+                        }
+                    },
+                    enabled = RestaurantList.restaurants.any { it.id == menu.restaurantId && it.isInDatabase }
+                ) {
                     val checkColor = if (menu.isInDatabase && menu.edited) {
                         val hexColor = "F29DAB"
                         val red = hexColor.substring(0, 2).toInt(16)

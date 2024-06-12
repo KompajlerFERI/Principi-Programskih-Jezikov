@@ -193,7 +193,7 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = {PushToDatabase.pushRestaurant(restaurant)}) {
+                    IconButton(onClick = {PushToDatabase.pushRestaurant(restaurant); refresh.value = !refresh.value;}) {
                         val checkColor = if (restaurant.isInDatabase && restaurant.edited) {
                             val hexColor = "F29DAB"
                             val red = hexColor.substring(0, 2).toInt(16)
