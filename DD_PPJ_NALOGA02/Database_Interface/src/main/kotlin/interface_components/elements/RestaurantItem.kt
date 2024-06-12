@@ -185,6 +185,7 @@ fun RestaurantItem(
                     }
                 }
 
+                // Push to database button
                 // Is in database = red, not = rey, is in but edited = orane
                 Column(
                     modifier = Modifier

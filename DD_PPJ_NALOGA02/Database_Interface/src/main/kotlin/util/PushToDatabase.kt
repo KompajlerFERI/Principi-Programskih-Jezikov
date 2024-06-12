@@ -21,7 +21,8 @@ data class RestaurantDb(
     val mealSurcharge: String,
     val workingHours: List<WorkingHour>,
     val ownerId: String,
-    val location: Location
+    val location: Location,
+    val tags: List<String>
 )
 
 data class WorkingHour(
@@ -44,6 +45,10 @@ data class MenuDb(
     val sideDishes: List<String>,
     val restaurantId: String,
     val tag: String,
+)
+
+data class Tag(
+    val tagId: String
 )
 
 object Auth {
@@ -84,11 +89,31 @@ fun getIdFromTagName(tagName: String): String {
     return ""
 }
 
+
+
 object PushToDatabase {
+    fun getCategoriesFromMenus(restaurant: Restaurant): MutableList<String> {
+        val returnList: MutableList<String> = mutableListOf()
+
+        for (tag in restaurant.menuList) {
+            if (!(tag.category in returnList)) {
+                returnList.add(tag.category)
+            }
+        }
+
+        return returnList
+    }
 
     fun pushRestaurant(restaurant: Restaurant) {
         if (restaurant.isInDatabase && restaurant.edited) {
             Auth.login("Sluzek", "1234")
+
+            val tagList = getCategoriesFromMenus(restaurant)
+            val tagListIds: MutableList<String> = mutableListOf()
+
+            for (tag in tagList) {
+                tagListIds.add(getIdFromTagName(tag))
+            }
 
             val restaurantDb = RestaurantDb(
                 name = restaurant.name,
@@ -108,7 +133,8 @@ object PushToDatabase {
                 location = Location(
                     type = "Point",
                     coordinates = listOf(restaurant.longitude, restaurant.latitude)
-                )
+                ),
+                tags = tagListIds
             )
 
             val JSON = "application/json".toMediaType()
@@ -142,6 +168,13 @@ object PushToDatabase {
             }
             Auth.login("Sluzek", "1234")
 
+            val tagList = getCategoriesFromMenus(restaurant)
+            val tagListIds: MutableList<String> = mutableListOf()
+
+            for (tag in tagList) {
+                tagListIds.add(getIdFromTagName(tag))
+            }
+
             val restaurantDb = RestaurantDb(
                 name = restaurant.name,
                 address = restaurant.address,
@@ -160,7 +193,8 @@ object PushToDatabase {
                 location = Location(
                     type = "Point",
                     coordinates = listOf(restaurant.longitude, restaurant.latitude)
-                )
+                ),
+                tags = tagListIds
             )
 
             //println(restaurantDb)

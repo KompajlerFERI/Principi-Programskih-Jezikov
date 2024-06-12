@@ -104,9 +104,9 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
             DatabaseJsonToClass.JsonToUser(it)
         }
 
-        for (user in UserList.users) {
-            println(user.username)
-        }
+//        for (user in UserList.users) {
+//            println(user.username)
+//        }
     }
 
 
