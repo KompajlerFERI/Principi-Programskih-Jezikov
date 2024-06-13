@@ -201,7 +201,11 @@ object DatabaseJsonToClass {
         }
 
         if (user.userType != "admin") {
-            UserList.addUser(user)
+            if (!UserList.users.any { it.id == user.id }) {
+                UserList.addUser(user)
+            } else {
+                println("User already exists in the list.")
+            }
         }
     }
 }
