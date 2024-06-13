@@ -25,7 +25,7 @@ object RemoveFromDatabase {
             UserList.users.remove(user)
         }
     }
-    fun removeRestaurant(restaurant: Restaurant) {
+    fun removeRestaurant(restaurant: Restaurant, restaurantsTemp: MutableList<Restaurant>) {
         if (!restaurant.isInDatabase) {
             println("Restaurant is not in the database.")
             return
@@ -47,6 +47,9 @@ object RemoveFromDatabase {
         }
         if (RestaurantList.restaurants.contains(restaurant)) {
             RestaurantList.restaurants.remove(restaurant)
+        }
+        if (restaurantsTemp.contains(restaurant)) {
+            restaurantsTemp.remove(restaurant)
         }
         restaurant.deleted = true
 

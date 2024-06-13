@@ -66,7 +66,7 @@ object DatabaseJsonToClass {
             // If the restaurant does not exist in the list, add it
             RestaurantList.add(restaurant)
         } else {
-            println("Restaurant exists already!")
+            //println("Restaurant exists already!")
         }
     }
 
@@ -99,7 +99,7 @@ object DatabaseJsonToClass {
             // If the restaurant does not exist in the list, add it
             TagList.add(tag)
         } else {
-            println("Tag already exists in the list.")
+            //println("Tag already exists in the list.")
         }
     }
     fun JsonToMenuItem(JsonString: String) {
@@ -142,7 +142,7 @@ object DatabaseJsonToClass {
                             restaurant.menuList.add(menuItem)
                         }
                         else {
-                            println("Menu item already exists in the restaurant.")
+                            //println("Menu item already exists in the restaurant.")
                         }
                     }
                 }
@@ -208,7 +208,7 @@ object DatabaseJsonToClass {
             if (!UserList.users.any { it.id == user.id }) {
                 UserList.addUser(user)
             } else {
-                println("User already exists in the list.")
+                //println("User already exists in the list.")
             }
         }
     }

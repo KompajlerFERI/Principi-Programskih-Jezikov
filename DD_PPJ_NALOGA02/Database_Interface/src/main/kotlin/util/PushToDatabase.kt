@@ -209,7 +209,7 @@ object PushToDatabase {
         } else {
 
             if (restaurant.isInDatabase) {
-                println("Restaurant already exists in the database.")
+                //println("Restaurant already exists in the database.")
                 return
             }
             Auth.login("Sluzek", "1234")
@@ -336,7 +336,7 @@ object PushToDatabase {
         } else {
 
             if (menu.isInDatabase) {
-                println("Restaurant already exists in the database.")
+                //println("Restaurant already exists in the database.")
                 return
             }
             Auth.login("Sluzek", "1234")

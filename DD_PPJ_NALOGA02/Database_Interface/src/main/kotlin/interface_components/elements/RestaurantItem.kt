@@ -178,7 +178,7 @@ fun RestaurantItem(
                         .align(Alignment.CenterVertically)
                         .padding(0.dp, 0.dp, 16.dp, 0.dp)
                 ) {
-                    IconButton(onClick = { onDeleteClick(); RemoveFromDatabase.removeRestaurant(restaurant); restaurantsTemp.remove(restaurant); }) {
+                    IconButton(onClick = { onDeleteClick(); RemoveFromDatabase.removeRestaurant(restaurant, restaurantsTemp); }) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
@@ -283,7 +283,7 @@ fun RestaurantItem(
                         println("EDITED")
                         if(
                             editedName.length > 0 &&
-                            editedPayPrice.toFloatOrNull() != null &&
+                            editedPayPrice.replace(",", ".").toFloatOrNull() != null &&
                             editedAddress.length > 0 &&
                             //editedPhoneNumber.length > 0 &&
                             //ValidityUtil.isValidPhoneNumber(editedPhoneNumber) &&
@@ -367,7 +367,7 @@ fun RestaurantItem(
                         MenuItem(
                             menu = menu,
                             onEditClick = { editedMenu ->
-                                println("EDITEDDDDDD")
+                                //println("EDITEDDDDDD")
                                 val index = menus.value.indexOf(menu)
                                 if (index != -1) {
                                     val updatedMenus = menus.value.toMutableList()
