@@ -28,7 +28,7 @@ import java.io.IOException
 @Preview
 fun App() {
     val clickedNavButton = remember { mutableStateOf(false) }
-    var currentContent by remember { mutableStateOf(ContentSwitch.Restaurants) }
+    var currentContent by remember { mutableStateOf(ContentSwitch.About) }
     var restaurants = remember { mutableListOf<Restaurant>() }
     val isLoading = remember { mutableStateOf(false) }
 
