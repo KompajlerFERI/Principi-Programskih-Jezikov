@@ -81,9 +81,9 @@ fun Restaurants(restaurants: MutableList<Restaurant>, isLoading: MutableState<Bo
             DatabaseJsonToClass.JsonTagToClass(it)
         }
 
-        for (tag in TagList.tags) {
-            println("TAG: ${tag.name}")
-        }
+//        for (tag in TagList.tags) {
+//            println("TAG: ${tag.name}")
+//        }
     }
 
     request = Request.Builder()
