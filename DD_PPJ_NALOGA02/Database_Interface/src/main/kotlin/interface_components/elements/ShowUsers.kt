@@ -34,6 +34,7 @@ fun ShowUsers(
                     onDeleteClick = {
                         users.remove(restaurant)
                         refresh.value = !refresh.value
+
                     }
                 )
             }

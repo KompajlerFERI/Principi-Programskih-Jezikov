@@ -115,7 +115,7 @@ fun User(
                     .align(Alignment.CenterVertically)
                     .padding(0.dp, 0.dp, 16.dp, 0.dp)
             ) {
-                IconButton(onClick = { onDeleteClick(); }) {
+                IconButton(onClick = { onDeleteClick(); RemoveFromDatabase.removeUser(user)}) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
