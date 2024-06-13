@@ -11,6 +11,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import scraper.Menu
 import scraper.Restaurant
 import scraper.TagList
+import scraper.User
 import java.io.IOException
 import java.util.*
 
@@ -51,6 +52,9 @@ data class Tag(
     val tagId: String
 )
 
+data class UpdateUserDB(
+    val id: String
+)
 object Auth {
     var cookie: String = ""
 
@@ -92,6 +96,38 @@ fun getIdFromTagName(tagName: String): String {
 
 
 object PushToDatabase {
+    fun approveUser(user: User) {
+        if (user.pendingApproval == "false") {
+            println("User is already approved.")
+            return
+        }
+        Auth.login("Sluzek", "1234")
+
+        val userDb = UpdateUserDB(
+            id = user.id
+        )
+
+        val JSON = "application/json".toMediaType()
+        val gson = GsonBuilder().create()
+        val json = gson.toJson(userDb)
+
+        val body = json.toRequestBody(JSON)
+
+        val request = Request.Builder()
+            .url("http://localhost:3001/users/approveRestaurantOwner/${user.id}")
+            .put(body)
+            .addHeader("Cookie", Auth.cookie)
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw Exception("Unexpected code $response")
+            val responseBody = response.body!!.string()
+            println("Response body: " + responseBody)
+
+            user.pendingApproval = "false"
+        }
+    }
     fun getCategoriesFromMenus(restaurant: Restaurant): MutableList<String> {
         val returnList: MutableList<String> = mutableListOf()
 

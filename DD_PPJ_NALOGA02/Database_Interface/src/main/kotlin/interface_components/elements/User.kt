@@ -123,6 +123,28 @@ fun User(
                     )
                 }
             }
+            if (user.pendingApproval == "true") {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .padding(0.dp, 0.dp, 16.dp, 0.dp)
+                ) {
+                    IconButton(onClick = { PushToDatabase.approveUser(user); refresh.value = !refresh.value;}) {
+                        val checkColor = if (user.pendingApproval == "true") {
+                            Color.Gray
+                        }
+                        else {
+                            textColor
+                        }
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = checkColor
+                        )
+                    }
+                }
+            }
         }
     }
 }

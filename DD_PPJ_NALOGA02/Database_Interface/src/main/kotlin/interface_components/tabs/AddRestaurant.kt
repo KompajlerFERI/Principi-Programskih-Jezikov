@@ -214,7 +214,7 @@ fun AddRestaurant(restaurants: MutableList<Restaurant>) {
                     style = TextStyle(fontSize = 18.sp),
                     color = textColor
                 )
-                if (menuListUpdate || !menuListUpdate) {
+                //if (menuListUpdate || !menuListUpdate) {
                     menuList.value.forEach {  menu ->
                         AddRestaurantMenuItem(
                             menu = menu,
@@ -229,7 +229,7 @@ fun AddRestaurant(restaurants: MutableList<Restaurant>) {
                         )
 
                     }
-                }
+                //}
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Button(

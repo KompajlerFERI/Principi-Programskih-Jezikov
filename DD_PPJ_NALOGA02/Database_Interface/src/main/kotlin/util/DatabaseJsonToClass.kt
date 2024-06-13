@@ -198,6 +198,10 @@ object DatabaseJsonToClass {
                 val id = fieldValue.asString
                 user.id = id
             }
+            if (fieldName == "pendingApproval") {
+                val pending = fieldValue.asString
+                user.pendingApproval = pending
+            }
         }
 
         if (user.userType != "admin") {

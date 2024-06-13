@@ -6,5 +6,6 @@ class User(
     var firstName: String = "",
     var lastName: String = "",
     var email: String = "",
-    var userType: String = ""
+    var userType: String = "",
+    var pendingApproval: String = ""
 ) {}
