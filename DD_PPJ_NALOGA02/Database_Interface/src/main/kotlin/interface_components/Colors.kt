@@ -12,7 +12,7 @@ val backgroundGradientColorLighter = Color(0xFF83002A)
 //val backgroundGradientColorDarker = Color(0xFF1d90b9)
 val backgroundGradientColorDarker = Color(0xFF83002A)
 
-val textColorDark = Color.Black
+val textColorLight = Color.White
 val textColor = Color(0xFF83002A)
 val elementGradientColorLighter = Color(0xFF83002A)
 //val elementGradientColorLighter = Color.White //button ?

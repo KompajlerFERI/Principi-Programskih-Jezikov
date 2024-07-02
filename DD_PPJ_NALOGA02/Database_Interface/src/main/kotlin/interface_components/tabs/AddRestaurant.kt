@@ -320,7 +320,7 @@ fun AddRestaurant(restaurants: MutableList<Restaurant>) {
                                 )
                                 .padding(horizontal = 20.dp, vertical = 10.dp)
                         ) {
-                            Text("Add Restaurant", color = textColorDark)
+                            Text("Add Restaurant", color = textColorLight)
                         }
                     }
                 }

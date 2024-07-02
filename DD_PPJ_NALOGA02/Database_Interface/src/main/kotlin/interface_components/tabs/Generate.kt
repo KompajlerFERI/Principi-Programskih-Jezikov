@@ -24,10 +24,9 @@ import androidx.compose.ui.unit.sp
 import interface_components.elementGradientColorDarker
 import interface_components.elementGradientColorLighter
 import interface_components.textColor
-import interface_components.textColorDark
+import interface_components.textColorLight
 import scraper.Restaurant
 import util.GenerateUtil
-import util.ValidityUtil
 
 @Composable
 fun Generate(restaurants: MutableList<Restaurant>) {
@@ -224,7 +223,7 @@ fun Generate(restaurants: MutableList<Restaurant>) {
                                     )
                                     .padding(horizontal = 20.dp, vertical = 10.dp)
                             ) {
-                                Text("Generate", color = textColorDark)
+                                Text("Generate", color = textColorLight)
                             }
                         }
                     }
